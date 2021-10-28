@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   Vesalius: Vesalius.html
   Vesalius_Analysis/Vesalius_analysis: Vesalius_analysis.html
-last_built: 2021-10-28T13:56Z
+last_built: 2021-10-28T14:09Z
 urls:
   reference: https://patrickcnmartin.github.io/Vesalius//reference
   article: https://patrickcnmartin.github.io/Vesalius//articles

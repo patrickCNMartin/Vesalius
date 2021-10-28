@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>isolating territories from segmented Vesalius images — isolateTerritories.array • vesalius</title>
+<title>Changelog • vesalius</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,7 @@
 
 
 
-<meta property="og:title" content="isolating territories from segmented Vesalius images — isolateTerritories.array" />
-<meta property="og:description" content="isolating territories from segmented Vesalius images" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -123,95 +122,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>isolating territories from segmented Vesalius images</h1>
-    <small class="dont-index">Source: <a href='https://github.com/patrickCNMartin/Vesalius/blob/main/R/IsolatingTerritories.R'><code>R/IsolatingTerritories.R</code></a></small>
-    <div class="hidden name"><code>isolateTerritories.array.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/patrickCNMartin/Vesalius/blob/main/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>isolating territories from segmented Vesalius images</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>isolateTerritories.array</span><span class='op'>(</span>
-  <span class='va'>image</span>,
-  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"distance"</span><span class='op'>)</span>,
-  captureRadius <span class='op'>=</span> <span class='fl'>0.025</span>,
-  global <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  minBar <span class='op'>=</span> <span class='fl'>10</span>,
-  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>image</th>
-      <td><p>data.frame - Vesalius formatted data.frame (i.e. barcodes,
-x,y,cc,value,tile) - Segmentation must have been applied beforehand!</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>character describing barcode pooling method.
-Currently, only "distance" availble</p></td>
-    </tr>
-    <tr>
-      <th>captureRadius</th>
-      <td><p>numeric - proportion of maximum distance between
-barcodes that will be used to pool barcodes together (range 0 - 1).</p></td>
-    </tr>
-    <tr>
-      <th>global</th>
-      <td><p>logical - If TRUE, territories will be numbered across all
-colour segments. If FALSE, territories will be numbered within each colour
-segment.</p></td>
-    </tr>
-    <tr>
-      <th>minBar</th>
-      <td><p>integer - minimum number of barcodes allowed in each territory</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>logical - progress message output.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Returns a Vesalius data.frame with "barcodes","x","y","cc",
-"value","tile","cluster","territory".
-"cluster" represents the colour segment the pixel belongs to and "territory"
-describe the tissue territory after pooling.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Segmented images in the form of a Vesalius formatted data frame are
-further separated into territories. This is accomplished by pooling barcodes
-that are associated with a colour cluster into territories based on the
-distance between each barcode.</p>
-<p>First, <code>isolateTerritories.array</code> considers the maximum distance
-between all beads. The captureRadius will define which proportion of this
-distance should be considered.</p>
-<p>Second, a seed barcode will be selected and all barcodes that are within the
-capture distance of the seed barcode with be pooled together. This process
-is then applied on barcodes that have been selected in this manner. The
-process is repeated until all barcodes have been pooled into a territory.
-If there are still barcodes remaining, a new seed barcode is selected and the
-whole process is repeated. NOTE : Territory isolation is applied to each
-colour segment independently.</p>
-<p>If a territory does not contain enough barcodes, it will be pooled into the
-isolated territory. This territory contains all isolated territories
-regardless of colour cluster of origin.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>Vesalius</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 

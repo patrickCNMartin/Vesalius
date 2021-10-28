@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   Vesalius: Vesalius.html
-last_built: 2021-10-28T10:34Z
+last_built: 2021-10-28T11:47Z
 urls:
   reference: https://patrickcnmartin.github.io/Vesalius//reference
   article: https://patrickcnmartin.github.io/Vesalius//articles

@@ -116,7 +116,7 @@
 <div id="loading" class="section level1">
 <h1 class="hasAnchor">
 <a href="#loading" class="anchor"></a>Loading</h1>
-<p>First, let’s load the package and the data. Data originates from slide-seqV2 data (availble at (Single Cell Portal)[<a href="https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download" class="uri">https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download</a>]).</p>
+<p>First, let’s load the package and the data. Data originates from slide-seqV2 data (availble at <a href="https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download">Single Cell Portal</a>).</p>
 <p>For sake of simplicity, Vesalius takes a small subset of this data set and stores it in the form of a Seurat object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patrickcnmartin.github.io/Vesalius/">vesalius</a></span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -174,7 +174,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Histogram EQ</span>
 <span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/equalizeHistogram.html">equalizeHistogram</a></span><span class="op">(</span><span class="va">vesalius</span>,sleft <span class="op">=</span> <span class="fl">2.5</span>, sright<span class="op">=</span><span class="fl">2.5</span>,invert <span class="op">=</span><span class="cn">T</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
-<pre><code>## 2021-10-28 14:10:32  Inverting Colours</code></pre>
+<pre><code>## 2021-10-28 14:29:17  Inverting Colours</code></pre>
 <pre><code>## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum
 ## coordinate values
 
@@ -247,6 +247,77 @@
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># comparing territories</span>
 <span class="va">two</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractMarkers.html">extractMarkers</a></span><span class="op">(</span><span class="va">vesalius</span>, <span class="va">counts</span>, seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="session-info" class="section level1">
+<h1 class="hasAnchor">
+<a href="#session-info" class="anchor"></a>Session Info</h1>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## R version 4.1.1 (2021-08-10)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.3 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+## 
+## locale:
+##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] vesalius_0.1.0     ggplot2_3.3.5      tidyr_1.1.4        dplyr_1.0.7       
+## [5] imager_0.42.10     magrittr_2.0.1     SeuratObject_4.0.2 Seurat_4.0.5      
+## 
+## loaded via a namespace (and not attached):
+##   [1] systemfonts_1.0.3     plyr_1.8.6            igraph_1.2.7         
+##   [4] lazyeval_0.2.2        sp_1.4-5              splines_4.1.1        
+##   [7] listenv_0.8.0         scattermore_0.7       digest_0.6.28        
+##  [10] htmltools_0.5.2       tiff_0.1-8            fansi_0.5.0          
+##  [13] memoise_2.0.0         tensor_1.5            cluster_2.1.2        
+##  [16] ROCR_1.0-11           globals_0.14.0        matrixStats_0.61.0   
+##  [19] pkgdown_1.6.1         spatstat.sparse_2.0-0 jpeg_0.1-9           
+##  [22] colorspace_2.0-2      ggrepel_0.9.1         textshaping_0.3.6    
+##  [25] rbibutils_2.2.4       xfun_0.27             crayon_1.4.1         
+##  [28] jsonlite_1.7.2        spatstat.data_2.1-0   survival_3.2-13      
+##  [31] zoo_1.8-9             glue_1.4.2            polyclip_1.10-0      
+##  [34] gtable_0.3.0          leiden_0.3.9          future.apply_1.8.1   
+##  [37] abind_1.4-5           scales_1.1.1          miniUI_0.1.1.1       
+##  [40] Rcpp_1.0.7            viridisLite_0.4.0     xtable_1.8-4         
+##  [43] reticulate_1.22       spatstat.core_2.3-0   htmlwidgets_1.5.4    
+##  [46] httr_1.4.2            RColorBrewer_1.1-2    ellipsis_0.3.2       
+##  [49] ica_1.0-2             pkgconfig_2.0.3       farver_2.1.0         
+##  [52] sass_0.4.0            uwot_0.1.10           deldir_1.0-6         
+##  [55] utf8_1.2.2            tidyselect_1.1.1      labeling_0.4.2       
+##  [58] rlang_0.4.12          reshape2_1.4.4        later_1.3.0          
+##  [61] munsell_0.5.0         tools_4.1.1           cachem_1.0.6         
+##  [64] generics_0.1.1        ggridges_0.5.3        imagerExtra_1.3.2    
+##  [67] evaluate_0.14         stringr_1.4.0         fastmap_1.1.0        
+##  [70] fftwtools_0.9-11      yaml_2.2.1            ragg_1.1.3           
+##  [73] goftest_1.2-3         knitr_1.36            fs_1.5.0             
+##  [76] fitdistrplus_1.1-6    purrr_0.3.4           RANN_2.6.1           
+##  [79] readbitmap_0.1.5      pbapply_1.5-0         future_1.22.1        
+##  [82] nlme_3.1-153          mime_0.12             concaveman_1.1.0     
+##  [85] compiler_4.1.1        plotly_4.10.0         png_0.1-7            
+##  [88] spatstat.utils_2.2-0  tibble_3.1.5          bslib_0.3.1          
+##  [91] stringi_1.7.5         highr_0.9             desc_1.4.0           
+##  [94] RSpectra_0.16-0       lattice_0.20-45       Matrix_1.3-4         
+##  [97] vctrs_0.3.8           pillar_1.6.4          lifecycle_1.0.1      
+## [100] spatstat.geom_2.3-0   Rdpack_2.1.2          lmtest_0.9-38        
+## [103] jquerylib_0.1.4       RcppAnnoy_0.0.19      data.table_1.14.2    
+## [106] cowplot_1.1.1         irlba_2.3.3           tvR_0.3.2            
+## [109] httpuv_1.6.3          patchwork_1.1.1       R6_2.5.1             
+## [112] promises_1.2.0.1      KernSmooth_2.23-20    gridExtra_2.3        
+## [115] bmp_0.3               parallelly_1.28.1     codetools_0.2-18     
+## [118] MASS_7.3-54           rprojroot_2.0.2       withr_2.4.2          
+## [121] sctransform_0.3.2     mgcv_1.8-38           parallel_4.1.1       
+## [124] grid_4.1.1            rpart_4.1-15          rmarkdown_2.11       
+## [127] Rtsne_0.15            shiny_1.7.1</code></pre>
 </div>
   </div>
 

@@ -88,7 +88,7 @@
       <h1 data-toc-skip>Vesalius: Quick Start</h1>
                         <h4 class="author">Patrick C.N. Martin</h4>
             
-            <h4 class="date">2021-11-01</h4>
+            <h4 class="date">2021-11-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/patrickCNMartin/Vesalius/blob/main/vignettes/vesalius.Rmd"><code>vignettes/vesalius.Rmd</code></a></small>
       <div class="hidden name"><code>vesalius.Rmd</code></div>
@@ -174,25 +174,24 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Histogram EQ</span>
 <span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/equalizeHistogram.html">equalizeHistogram</a></span><span class="op">(</span><span class="va">vesalius</span>,sleft <span class="op">=</span> <span class="fl">2.5</span>, sright<span class="op">=</span><span class="fl">2.5</span>,invert <span class="op">=</span><span class="cn">T</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
-<pre><code>## 2021-11-01 11:59:01  Inverting Colours</code></pre>
 <pre><code>## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum
 ## coordinate values
 
 ## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum
 ## coordinate values</code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Variance regularisation</span>
 <span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regulariseImage.html">regulariseImage</a></span><span class="op">(</span><span class="va">vesalius</span>, lambda <span class="op">=</span> <span class="fl">10</span>,
                             niter <span class="op">=</span> <span class="fl">200</span>, normalise<span class="op">=</span><span class="cn">T</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum
 ## coordinate values</code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Smoothing</span>
 <span class="co"># !!!Optional!!! -</span>
 <span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoothArray.html">smoothArray</a></span><span class="op">(</span><span class="va">vesalius</span>,method <span class="op">=</span> <span class="st">"box"</span>, box <span class="op">=</span> <span class="fl">1</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in as.cimg.data.frame(select(image, c("x", "y", "cc", "value"))):
 ## Guessing image dimensions from maximum coordinate values</code></pre>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Segmentation</span>
 <span class="co"># This function provides smoothing internally.</span>
 <span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/iterativeSegmentation.array.html">iterativeSegmentation.array</a></span><span class="op">(</span><span class="va">vesalius</span>,
@@ -201,7 +200,7 @@
                                         method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"median"</span><span class="op">)</span>,
                                         sigma<span class="op">=</span><span class="fl">1.5</span>,
                                         box <span class="op">=</span> <span class="fl">10</span>,
-                                        useCenter <span class="op">=</span> <span class="cn">T</span>,
+                                        useCenter <span class="op">=</span> <span class="cn">F</span>,
                                         invert <span class="op">=</span><span class="cn">T</span>,
                                         verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in as.cimg.data.frame(select(image, c("x", "y", "cc", "value"))):
@@ -211,7 +210,7 @@
 ## Guessing image dimensions from maximum coordinate values</code></pre>
 <pre><code>## Warning in as.cimg.data.frame(imgCopy): Guessing image dimensions from maximum
 ## coordinate values</code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Isolating territories from colour segments</span>
 <span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/isolateTerritories.array.html">isolateTerritories.array</a></span><span class="op">(</span><span class="va">vesalius</span>,
                                      captureRadius <span class="op">=</span> <span class="fl">0.1</span>,
@@ -222,7 +221,7 @@
 <h1 class="hasAnchor">
 <a href="#visualisation" class="anchor"></a>Visualisation</h1>
 <p>Sixth, we can visualise the territories.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Let's have a look!</span>
 <span class="va">imgTerritory</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/territoryPlot.html">territoryPlot</a></span><span class="op">(</span><span class="va">vesalius</span>, randomise <span class="op">=</span> <span class="cn">TRUE</span>,cex <span class="op">=</span><span class="fl">15</span> , cex.pt<span class="op">=</span><span class="fl">3.5</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">imgTerritory</span><span class="op">)</span></code></pre></div>
@@ -232,26 +231,26 @@
 <h1 class="hasAnchor">
 <a href="#territory-extraction-and-markers" class="anchor"></a>Territory extraction and markers</h1>
 <p>Finally, we can extract territories to run a more in depth analysis. This returns a Seurat object with all selected territories. We can also find differential gene expression between territories.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># extract terriotry from seurat object</span>
 <span class="va">ter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractTerritories.html">extractTerritories</a></span><span class="op">(</span><span class="va">vesalius</span>,<span class="va">counts</span>,seedID<span class="op">=</span> <span class="fl">1</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum
 ## coordinate values</code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get all markers related to all territories</span>
 <span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractAllMarkers.html">extractAllMarkers</a></span><span class="op">(</span><span class="va">vesalius</span>,<span class="va">counts</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span>
 
 
 <span class="co"># get markers associated with on or more territories</span>
 <span class="va">one</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractMarkers.html">extractMarkers</a></span><span class="op">(</span><span class="va">vesalius</span>, <span class="va">counts</span>, seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># comparing territories</span>
 <span class="va">two</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractMarkers.html">extractMarkers</a></span><span class="op">(</span><span class="va">vesalius</span>, <span class="va">counts</span>, seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## R version 4.1.2 (2021-11-01)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
@@ -289,7 +288,7 @@
 ##  [34] gtable_0.3.0          leiden_0.3.9          future.apply_1.8.1   
 ##  [37] abind_1.4-5           scales_1.1.1          miniUI_0.1.1.1       
 ##  [40] Rcpp_1.0.7            viridisLite_0.4.0     xtable_1.8-4         
-##  [43] reticulate_1.22       spatstat.core_2.3-0   htmlwidgets_1.5.4    
+##  [43] reticulate_1.22       spatstat.core_2.3-1   htmlwidgets_1.5.4    
 ##  [46] httr_1.4.2            RColorBrewer_1.1-2    ellipsis_0.3.2       
 ##  [49] ica_1.0-2             pkgconfig_2.0.3       farver_2.1.0         
 ##  [52] sass_0.4.0            uwot_0.1.10           deldir_1.0-6         

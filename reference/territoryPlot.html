@@ -179,21 +179,21 @@ separate panels</p></td>
 have been isolated from a Vesalius image.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>vesalius</span><span class='op'>)</span>
-<span class='co'># Seurat pre-processing</span>
-<span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'>NormalizeData</span><span class='op'>(</span><span class='va'>vesalius</span><span class='op'>)</span>
-<span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'>FindVariableFeatures</span><span class='op'>(</span><span class='va'>image</span>, nfeatures <span class='op'>=</span> <span class='fl'>2000</span><span class='op'>)</span>
-<span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'>ScaleData</span><span class='op'>(</span><span class='va'>image</span><span class='op'>)</span>
-<span class='co'># converting to rgb</span>
-<span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rgbPCA.html'>rgbPCA</a></span><span class='op'>(</span><span class='va'>image</span>,slices <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildImageArray.html'>buildImageArray</a></span><span class='op'>(</span><span class='va'>image</span>, sliceID<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='co'># One segmentation round</span>
-<span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='iterativeSegmentation.array.html'>iterativeSegmentation.array</a></span><span class='op'>(</span><span class='va'>image</span><span class='op'>)</span>
-<span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='isolateTerritories.array.html'>isolateTerritories.array</a></span><span class='op'>(</span><span class='va'>image</span>, minBar <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>territoryPlot</span><span class='op'>(</span><span class='va'>image</span>,cex <span class='op'>=</span> <span class='fl'>12</span>, cex.pt <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>vesalius</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># Seurat pre-processing</span></span>
+<span class='r-in'><span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'>NormalizeData</span><span class='op'>(</span><span class='va'>vesalius</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'>FindVariableFeatures</span><span class='op'>(</span><span class='va'>image</span>, nfeatures <span class='op'>=</span> <span class='fl'>2000</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'>ScaleData</span><span class='op'>(</span><span class='va'>image</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># converting to rgb</span></span>
+<span class='r-in'><span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rgbPCA.html'>rgbPCA</a></span><span class='op'>(</span><span class='va'>image</span>,slices <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildImageArray.html'>buildImageArray</a></span><span class='op'>(</span><span class='va'>image</span>, sliceID<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># One segmentation round</span></span>
+<span class='r-in'><span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='iterativeSegmentation.array.html'>iterativeSegmentation.array</a></span><span class='op'>(</span><span class='va'>image</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>image</span> <span class='op'>&lt;-</span> <span class='fu'><a href='isolateTerritories.array.html'>isolateTerritories.array</a></span><span class='op'>(</span><span class='va'>image</span>, minBar <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>territoryPlot</span><span class='op'>(</span><span class='va'>image</span>,cex <span class='op'>=</span> <span class='fl'>12</span>, cex.pt <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

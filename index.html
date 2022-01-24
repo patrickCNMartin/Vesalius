@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,12 +39,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/vesalius.html">Get started</a>
 </li>
@@ -67,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/patrickCNMartin/Vesalius/">
+  <a href="https://github.com/patrickCNMartin/Vesalius/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -84,36 +80,36 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="vesalius" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#vesalius" class="anchor"></a>Vesalius</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="vesalius">Vesalius<a class="anchor" aria-label="anchor" href="#vesalius"></a>
+</h1></div>
 <p>Welcome to the Vesalius GitHub page! <img src="reference/figures/banner.png"></p>
-<div id="what-is-vesalius-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-is-vesalius-" class="anchor"></a>What is Vesalius ?</h2>
+<div class="section level2">
+<h2 id="what-is-vesalius-">What is Vesalius ?<a class="anchor" aria-label="anchor" href="#what-is-vesalius-"></a>
+</h2>
 <p>Vesalius is an R package to decipher tissue anatomy by embracing various image analysis techniques for high-resolution ST data. Vesalius identifies spatially expressed genes linked to the morphology of tissue structures.</p>
 </div>
-<div id="how-to-install-vesalius" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-install-vesalius" class="anchor"></a>How to install Vesalius?</h2>
+<div class="section level2">
+<h2 id="how-to-install-vesalius">How to install Vesalius?<a class="anchor" aria-label="anchor" href="#how-to-install-vesalius"></a>
+</h2>
 <p>If you do not have <code>devtools</code> already installed, please do so beforehand.</p>
-<pre><code>install.packages("devtools")</code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></code></pre>
 <p>Ensure that the library has been loaded</p>
-<pre><code><a href="https://devtools.r-lib.org/">library(devtools)</a></code></pre>
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></code></pre>
 <p>Install Vesalius via GitHub</p>
-<pre><code>install_github("patrickCNMartin/Vesalius")</code></pre>
+<pre><code><span class="fu">install_github</span><span class="op">(</span><span class="st">"patrickCNMartin/Vesalius"</span><span class="op">)</span></code></pre>
 </div>
-<div id="how-to-use-vesalius" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-use-vesalius" class="anchor"></a>How to use Vesalius?</h2>
+<div class="section level2">
+<h2 id="how-to-use-vesalius">How to use Vesalius?<a class="anchor" aria-label="anchor" href="#how-to-use-vesalius"></a>
+</h2>
 <p>Vesalius provides an internal data set taken from real Spatial Transcriptomic data. This can be used as a dummy data set to get a feel for the Vesalius workflow.</p>
 <p>The “Quick Start” guide can be found <a href="https://patrickcnmartin.github.io/Vesalius/articles/vesalius.html">here</a></p>
-<p>An in depth view of the Vesalius workflow can be found <a href="https://patrickcnmartin.github.io/Vesalius/articles/Vesalius_Analysis/Vesalius_analysis.html">here</a>. This contains the entire analysis related to the Vesalius <a href="https://www.biorxiv.org/content/10.1101/2021.08.13.456235v1">bioRxiv pre-print</a>.</p>
+<p>An in depth view of the Vesalius workflow can be found <a href="https://patrickcnmartin.github.io/Vesalius/articles/Vesalius_Analysis/Vesalius_analysis.html">here</a>. This contains the entire analysis related to the Vesalius <a href="https://www.biorxiv.org/content/10.1101/2021.08.13.456235v1" class="external-link">bioRxiv pre-print</a>.</p>
 <p>NOTE: The in depth analysis file, contains path to files that should be changed accordingly.</p>
 </div>
-<div id="whats-next" class="section level2">
-<h2 class="hasAnchor">
-<a href="#whats-next" class="anchor"></a>What’s next?</h2>
+<div class="section level2">
+<h2 id="whats-next">What’s next?<a class="anchor" aria-label="anchor" href="#whats-next"></a>
+</h2>
 <p>The Vesalius package is in its early stage of development. We would ask you to share with us any bugs, concerns, or features you wish to see implemented.</p>
 <p>Please open a GitHub issue or send an email to Patrick Martin (<a href="mailto:patrick.martin@bric.ku.dk" class="email">patrick.martin@bric.ku.dk</a>)</p>
 </div>
@@ -122,35 +118,48 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/patrickCNMartin/Vesalius/">https://​github.com/​patrickCNMartin/​Vesalius/​</a>
-</li>
+<li><a href="https://github.com/patrickCNMartin/Vesalius/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing vesalius</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Patrick C.N. Martin <br><small class="roles"> Maintainer </small>  </li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Patrick C.N. Martin.</p>
+  <p></p>
+<p>Developed by Patrick C.N. Martin.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -158,6 +167,8 @@
 
   
 
+
+  
 
   </body>
 </html>

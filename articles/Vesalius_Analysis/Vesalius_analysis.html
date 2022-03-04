@@ -46,7 +46,7 @@
   <a href="../../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -97,8 +97,8 @@
 </h2>
 <p>The following file contains all code related to Spatial Transcriptomics analysis using Vesalius. While this file contains the code used to produce all analysis figures in the manuscript, the order of the code is somewhat different to that of the paper.</p>
 <p>We hope that this can also serve as a <em>vignette</em> describing various analysis possibilities provided by Vesalius. Each section or sub-section will indicate in which figure their respective output can be found.</p>
-<p>Please note that the code related to Vesalius benchmarking and comparison to other methods can be found <a href="">here</a>.</p>
-<p><em>NOTE that the path to files have not been changed - change path to files accordingly</em></p>
+<p>Please note that the code related to Vesalius benchmarking and comparison to other methods can be found <a href="https://github.com/patrickCNMartin/Vesalius/tree/main/methodComp" class="external-link">here</a>.</p>
+<p><strong>NOTE change path to files accordingly</strong></p>
 </div>
 <div class="section level2">
 <h2 id="set-up">Set up<a class="anchor" aria-label="anchor" href="#set-up"></a>
@@ -109,6 +109,7 @@
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patrickcnmartin.github.io/Vesalius/">vesalius</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dahtah.github.io/imager/" class="external-link">imager</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ShotaOchi/imagerExtra" class="external-link">imagerExtra</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -136,7 +137,7 @@
 <div class="section level3">
 <h3 id="rgb-embeddings">RGB embeddings<a class="anchor" aria-label="anchor" href="#rgb-embeddings"></a>
 </h3>
-<p>The first step of the Vesalius algorithm is to load and pre-process spatial transcriptomic data. For this manuscript, we used slide-seqV2 data provided on the <a href="https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download" class="external-link">Single Cell Portal</a>. Our analysis mainly focused on the mouse brain and embryo (E12.5). We also used SeqScope data available <a href="">here</a></p>
+<p>The first step of the Vesalius algorithm is to load and pre-process spatial transcriptomic data. For this manuscript, we used slide-seqV2 data provided on the <a href="https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download" class="external-link">Single Cell Portal</a>. Our analysis mainly focused on the mouse brain and embryo (E12.5). We also used SeqScope data available <a href="https://deepblue.lib.umich.edu/data/concern/data_sets/9c67wn05f" class="external-link">here</a>. Please note that the SeqScope dataset have already be preprocess and do not require further processing.</p>
 <p>Once the data has been loaded and pre-processed (log normalisation, scaling, Finding variable features - handled by Seurat), the data can be parsed to Vesalius for embedding into the RGB colour space.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
@@ -227,12 +228,13 @@
 <div class="section level3">
 <h3 id="image-array-creation">Image Array Creation<a class="anchor" aria-label="anchor" href="#image-array-creation"></a>
 </h3>
-<p>The next step uses the data frames generated above to build image arrays. If you have saved the data frame above, you can directly load that data frame. This function converts punctual coordinate locations into tiles. Each tile is then rasterised to include all possible pixel location and assigned its colour code. We will only use of the arrays as an example. The analysis of the second array will be shown below.</p>
+<p>The next step uses the data frames generated above to build image arrays. If you have saved the data frame above, you can directly load that data frame. This function converts punctual coordinate locations into tiles. Each tile is then rasterised to include all possible pixel locations and assigned its colour code to it. We will only use one of the arrays as an example. The analysis of both Slide-seq data is shown below.</p>
 <p>You will notice below that two of the arguments contain the key word “filter”. <code>filterGrid</code> removes stray beads and <code>filterThreshold</code> removes any tiles that might be to large (i.e tiles that fill gaps in the ST assay).</p>
-<p>The resolution argument changes to resolution of the output image. Smaller Images decrease run time. It should be noted that while the image resolution may be decreased, all beads are retained.</p>
+<p>The resolution argument changes the resolution of the output image. Smaller Images decrease run time. The image resolution may be decreased but all beads are still retained.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Loading saved data frame after PCA to RGB conversion</span>
+<span class="co"># Replace countList[[i]] with this data frame</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co">#imageBrain &lt;- utils::read.csv("path/to/file.csv",header=T, stringsAsFactors=F)</span>
 
@@ -250,14 +252,15 @@
 <div class="section level3">
 <h3 id="image-processing">Image processing<a class="anchor" aria-label="anchor" href="#image-processing"></a>
 </h3>
-<p>The first step in this section of the analysis will be to regularise the image via (Total Variance Regularisation)[<a href="https://cran.rstudio.com/web/packages/tvR/tvR.pdf" class="external-link uri">https://cran.rstudio.com/web/packages/tvR/tvR.pdf</a>]. Vesalius also offers the possibility to equalise color histogram to increase contrast between territories. This process is not always required and is better suited for PCA embeddings. See section on PCA embeddings below.</p>
+<p>The first step in this section of the analysis will be to regularise the image via <a href="https://cran.rstudio.com/web/packages/tvR/tvR.pdf" class="external-link">Total Variance Regularisation</a>. Vesalius also offers the possibility to equalise color histograms to increase contrast between territories. This process is not always required and is better suited for PCA embeddings. See section on PCA embeddings below.</p>
+<p>The higher the lambda the smoother the output.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">imageBrain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/regulariseImage.html">regulariseImage</a></span><span class="op">(</span><span class="va">imageBrain</span>,
                               lambda <span class="op">=</span> <span class="fl">5</span>,
                               niter <span class="op">=</span> <span class="fl">50</span>,
                               normalise<span class="op">=</span><span class="cn">T</span><span class="op">)</span></code></pre></div>
 <p>Finally, we will iteratively segment the image. This is achieved by the <code>iterativeSegmentation.array</code> that offers quite a few different options. As this function uses kmeans clustering to generate color segments, the <code>colDepth</code> argument define the number of final colour you wish to have. This function can take multiple values for <code>colDepth</code>. Essentially, the image will first be smoothed and then segmented into <code>k</code>colors. Then, another round of smoothing will be applied followed by another round of segmentation. This will be repeated for every value of <code>k</code>. In this context, we highly recommend using a <code>colDepth</code> with decreasing values (e.g. <code>seq(12,6, by = -2)</code>).</p>
-<p><em>Image smoothing is handle within the segmentation function. If you wish to smooth independantly, please use the <code>smoothArray</code>function.</em></p>
+<p><strong>Image smoothing is handle within the segmentation function. If you wish to smooth independently, please use the <code>smoothArray</code>function.</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># colDepth = number of colour segments</span>
@@ -274,6 +277,7 @@
                                           method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"box"</span><span class="op">)</span>,
                                           sigma<span class="op">=</span><span class="fl">1</span>,box <span class="op">=</span> <span class="fl">15</span>,
                                           useCenter <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p>The parameters selected during this process will affect the number final territories. While case by case parameter selection would optimised the final number of territories, we have noticed that these parameters are more closely tied to ST method. We used the same parameters for all data sets produced by the same ST method.</p>
 </div>
 <div class="section level3">
 <h3 id="territory-isolation">Territory Isolation<a class="anchor" aria-label="anchor" href="#territory-isolation"></a>
@@ -292,7 +296,7 @@
 <h3 id="vesalius-image-and-territory-visualisation">Vesalius Image and Territory visualisation<a class="anchor" aria-label="anchor" href="#vesalius-image-and-territory-visualisation"></a>
 </h3>
 <p>Both image arrays and territories can be visualised using Vesalius plotting functions. Please note that these functions are minimalistic: we assume that users might want to use their own plotting style and this is straight forward as the output of all Vesalius functions are simple data frames. Feel free to use which ever tool you prefer to visualise your data.</p>
-<p>The figure produce here is <em>Figure 2A</em> in the manuscript.</p>
+<p>The figure produce here is <strong>Figure 2A</strong> in the manuscript.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># IMPORTANT: the "split" show all territories separately - it just makes</span>
@@ -328,6 +332,7 @@
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Loading raw data into a Seurat object</span>
 <span class="co"># Pre-processing count data</span>
+<span class="co"># We keep a raw count seurat object to parse to DEG functions later on</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="va">bead</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ReadSlideSeq.html" class="external-link">ReadSlideSeq</a></span><span class="op">(</span><span class="st">"~/group/slide_seqV2/Puck_200115_08_bead_locations.csv"</span><span class="op">)</span>
 <span class="va">brainRaw</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="st">"~/group/slide_seqV2/Puck_200115_08.digital_expression.txt.gz"</span>, header <span class="op">=</span> <span class="cn">TRUE</span> <span class="op">)</span>
@@ -372,6 +377,12 @@
                                         captureRadius <span class="op">=</span> <span class="fl">0.008</span>,
                                         minBar <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
 <p>Once the data has been processed, we can select territories for in depth analysis. We recommend using the <code>territoryPlot</code> function with the <code>split</code> argument set to <code>TRUE</code> to better visualise and select the desired territories. Here we will use both raw counts and processed counts.</p>
+<p>This section produces:</p>
+<ul>
+<li><strong>Figure 3a</strong></li>
+<li><strong>Figure 3d</strong></li>
+<li>DEG are included in supplementary material of the manuscript.</li>
+</ul>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># seedID = numeric vector containing territories of interest</span>
@@ -379,6 +390,7 @@
 <span class="co"># NOTE that positive value with inflate while negative values will erode.</span>
 <span class="co"># CACluster = CA Pyramidal layer field</span>
 <span class="co"># medCluster = Medial habenula and thrid ventricle</span>
+
 <span class="co">#------------------------------------------------------------------------------#</span>
 
 <span class="va">CACluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractTerritories.html">extractTerritories</a></span><span class="op">(</span><span class="va">imageBrain</span>,<span class="va">brainRaw</span>,
@@ -393,11 +405,11 @@
 <span class="co"># Here we use the recommended pipeline as we are clustering barcodes and not</span>
 <span class="co"># producing images.</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="va">CACluster</span> <span class="op">&lt;-</span> <span class="va">CACluster</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-             <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-             <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">CACluster</span> <span class="op">&lt;-</span> <span class="va">CACluster</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+             <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+             <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
              <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>resolution <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>
 
 
@@ -406,7 +418,7 @@
 <span class="co"># This compares clusters between each other and does not consider all other</span>
 <span class="co"># barcodes. Used for annotation.</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="va">CAMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">CACluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">CAMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">CACluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">avg_log2FC</span> <span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span>
 
 <span class="co">#------------------------------------------------------------------------------#</span>
@@ -417,8 +429,8 @@
 <span class="co"># As such, we use normalised count values (brainCounts was previously preprocessed)</span>
 <span class="co"># Used for annotation.</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="va">CAClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">CACluster</span>,<span class="va">brainNorm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-                    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">20</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
+<span class="va">CAClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">CACluster</span>,<span class="va">brainNorm</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+                    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">20</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
 
 
 <span class="co">#------------------------------------------------------------------------------#</span>
@@ -470,17 +482,17 @@
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># The same process is applied to the third ventricle and medial habenula</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="va">medCluster</span> <span class="op">&lt;-</span> <span class="va">medCluster</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-             <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">medCluster</span> <span class="op">&lt;-</span> <span class="va">medCluster</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+             <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+             <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
              <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">medCluster</span> <span class="op">&lt;-</span> <span class="va">medCluster</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>resolution <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span>
+<span class="va">medCluster</span> <span class="op">&lt;-</span> <span class="va">medCluster</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>resolution <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span>
 
-<span class="va">medMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">medCluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">medMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">medCluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">avg_log2FC</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
-<span class="va">medClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">medCluster</span>,<span class="va">brainNorm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">25</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
+<span class="va">medClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">medCluster</span>,<span class="va">brainNorm</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">25</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
 
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Here we compare cluster between each other and more specifically clusters</span>
@@ -491,7 +503,7 @@
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="va">medComp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span><span class="va">medCluster</span>,ident.1 <span class="op">=</span> <span class="fl">0</span>, ident.2 <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="va">tvCompt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span><span class="va">medCluster</span>,ident.1 <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">8</span><span class="op">)</span>,ident.2<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">epiComp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span><span class="va">medCluster</span>,ident.1 <span class="op">=</span><span class="fl">1</span>,ident.2<span class="op">=</span><span class="fl">6</span><span class="op">)</span>
+<span class="co">#EpendymalComp &lt;- FindMarkers(medCluster,ident.1 =1,ident.2=6)</span>
 
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Plotting</span>
@@ -532,7 +544,8 @@
             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">9</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">" "</span>, title <span class="op">=</span> <span class="st">""</span>,
                 x <span class="op">=</span> <span class="st">"X coordinates"</span>, y <span class="op">=</span> <span class="st">"Y coordinates"</span><span class="op">)</span></code></pre></div>
-<p>Finally, we can visualize cell clustering in isolated territories</p>
+<p>Finally, we can visualise cell clustering in isolated territories</p>
+<p><strong>Figure 3a and Figure 3d</strong></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#pdf("SSV2_Brain_IsolatedTerritory.pdf", width = 10, height= 5)</span>
 <span class="va">coord_CA</span> <span class="op">/</span> <span class="va">coord_med</span>
@@ -542,6 +555,10 @@
 <h3 id="slide-seqv2---mouse-embryo-e12-5">Slide-SeqV2 - Mouse Embryo (E12.5)<a class="anchor" aria-label="anchor" href="#slide-seqv2---mouse-embryo-e12-5"></a>
 </h3>
 <p>We applied the same principles in the mouse embryo as in the mouse hippocampus. Here, we are using <em>Puck_190926_03</em>. If you have not saved the RGB embedding file please run the embedding section first and substitute object/files accordingly.</p>
+<p>The following section produces:</p>
+<ul>
+<li><strong>Figure 2c</strong></li>
+</ul>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bead</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ReadSlideSeq.html" class="external-link">ReadSlideSeq</a></span><span class="op">(</span><span class="st">"~/group/slide_seqV2/Puck_190926_03_bead_locations.csv"</span><span class="op">)</span>
 
@@ -589,7 +606,7 @@
 
 
 <span class="co">#----------------------------------------------------------------------------#</span>
-<span class="co"># Finally some plotting</span>
+<span class="co"># Finally some plotting - Figure 2c</span>
 <span class="co">#----------------------------------------------------------------------------#</span>
 <span class="va">imgSmoothedEm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">imageEmbryo</span>, as.cimg <span class="op">=</span> <span class="cn">F</span>,cex <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">imgTerritoryEm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/territoryPlot.html">territoryPlot</a></span><span class="op">(</span><span class="va">imageEmbryo</span>, randomise <span class="op">=</span> <span class="cn">TRUE</span>,cex <span class="op">=</span><span class="fl">15</span> , cex.pt<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span><span class="op">+</span>
@@ -601,7 +618,7 @@
 <span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Embryo.pdf"</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">7</span>, height<span class="op">=</span><span class="fl">5.5</span><span class="op">)</span>
 <span class="va">imgTerritoryEm</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>In the embryo, we isolated the eye for in depth analysis. The principles applied in hippocampus still apply here.</p>
+<p>In the embryo, we isolated the eye for in depth analysis. The principles applied in hippocampus still apply here. The DEG are included in the supplementary material of the manuscript.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Extract territories</span>
@@ -612,22 +629,22 @@
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Eye analysis</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="va">eyeCluster</span> <span class="op">&lt;-</span> <span class="va">eyeCluster</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-              <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">eyeCluster</span> <span class="op">&lt;-</span> <span class="va">eyeCluster</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+              <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
               <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">eyeCluster</span> <span class="op">&lt;-</span> <span class="va">eyeCluster</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>resolution <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span>
+<span class="va">eyeCluster</span> <span class="op">&lt;-</span> <span class="va">eyeCluster</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>resolution <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span>
 
 
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Embryonic eye markers</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="va">eyeMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">eyeCluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">eyeMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">eyeCluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
                              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">avg_log2FC</span> <span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span>
 
-<span class="va">eyeClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">eyeCluster</span>,<span class="va">embryoNorm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">30</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
+<span class="va">eyeClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">eyeCluster</span>,<span class="va">embryoNorm</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">30</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
 
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Here we compare cluster between each other and more specifically clusters</span>
@@ -677,6 +694,7 @@
             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">""</span>,
                                 x <span class="op">=</span> <span class="st">"X coordinates"</span>, y <span class="op">=</span> <span class="st">"Y coordinates"</span><span class="op">)</span></code></pre></div>
 <p>We can visualise the isolated eye.</p>
+<p><strong>Figure 3g</strong></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">coord_eye</span></code></pre></div>
 </div>
@@ -684,6 +702,8 @@
 <h3 id="seqscope---liver">SeqScope - Liver<a class="anchor" aria-label="anchor" href="#seqscope---liver"></a>
 </h3>
 <p>Vesalius is able to handle any type of spatial transcriptomic data as long as there are coordinates and gene counts provided. Here, we demonstrate Vesalius ability to recover tissue territories in another high resolution Spatial transcriptomics assay SeqScope. SeqScope data is available <a href="https://deepblue.lib.umich.edu/data/concern/data_sets/9c67wn05f" class="external-link">here</a>. The SeqScope team provide process spatial data sets in the form of <code>.rds</code>files containing Seurat objects as well as H&amp;E images. An important aspect to consider when working with these datasets, is that they may contain more than one “slice”. As each data set has already been pre-processed, we do not need to pre-process the data again.</p>
+<p>This section produces:</p>
+<p><strong>Figure 2e</strong></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Load data set</span>
@@ -742,6 +762,8 @@
 <h3 id="seqscope---colon">SeqScope - Colon<a class="anchor" aria-label="anchor" href="#seqscope---colon"></a>
 </h3>
 <p>We can apply the same process as described above but for the SeqScope Colon data set. The <code>.rds</code> files also contains more than one slice.</p>
+<p>This section produces:</p>
+<p><strong>Figure 2f</strong></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Load data set</span>
@@ -803,7 +825,12 @@
 <div class="section level3">
 <h3 id="expression-pattern-in-the-isolated-ca-field">Expression Pattern in the isolated CA Field<a class="anchor" aria-label="anchor" href="#expression-pattern-in-the-isolated-ca-field"></a>
 </h3>
-<p>We showed that we recovered the CA2 field in the CA field isolated territory This was due to the fact that we could recover subtle gene expression patterns that were otherwise lost or overshadowed by stronger patterns. In this section, we show how we can visualise these expression patterns.</p>
+<p>We showed that we recovered the CA2 field in isolated CA territory. This was due to the fact that we could recover subtle gene expression patterns that were otherwise lost or overshadowed by stronger patterns. In this section, we show how we can visualise these expression patterns.</p>
+<p>This section produces:</p>
+<ul>
+<li><strong>Figure 3c</strong></li>
+<li><strong>Figure S19</strong></li>
+</ul>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># First we show the overall and isolated pattern for pcp4 (Fig 3)</span>
@@ -865,6 +892,8 @@
 <h3 id="expression-patterns-in-the-isolated-eye">Expression Patterns in the Isolated Eye<a class="anchor" aria-label="anchor" href="#expression-patterns-in-the-isolated-eye"></a>
 </h3>
 <p>We can also visualise differentially expressed genes between layers in the eye.</p>
+<p>This section produces:</p>
+<p><strong>Figure 3h</strong></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Cryba4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/viewGeneExpression.html">viewGeneExpression</a></span><span class="op">(</span><span class="va">imageEmbryo</span>,<span class="va">eyeCluster</span>,
                              genes <span class="op">=</span> <span class="st">"Cryba4"</span>,cex<span class="op">=</span><span class="fl">20</span><span class="op">)</span><span class="op">+</span>
@@ -903,7 +932,7 @@
 <div class="section level2">
 <h2 id="territory-specific-expression-patterns-within-cell-types">Territory specific expression patterns within cell types<a class="anchor" aria-label="anchor" href="#territory-specific-expression-patterns-within-cell-types"></a>
 </h2>
-<p>Thanks to easy territory isolation, Vesalius can easily compare the expression of cells between different anatomical structures. Here, we present how we compared the expression of different cell types between anatomical structures in the mouse hippocampus. The data is taken from <em>Puck_200115_08</em>. First, we need to assign cell types to each barcode. In this instance, we used (RCTD)[<a href="https://github.com/dmcable/spacexr" class="external-link uri">https://github.com/dmcable/spacexr</a>] to decompose cell types contained within each barcode and store annotations into a Seurat object.</p>
+<p>Thanks to easy territory isolation, Vesalius can easily compare the expression of cells between different anatomical structures. Here, we present how we compared the expression of different cell types between anatomical structures in the mouse hippocampus. The data is taken from <em>Puck_200115_08</em>. First, we need to assign cell types to each barcode. In this instance, we used <a href="https://github.com/dmcable/spacexr" class="external-link">RCTD</a> to decompose cell types contained within each barcode and store annotations into a Seurat object.</p>
 <p><em>You do not need to use RCTD - you only need to assign cell types to the barcodes contained in your data. Feel free to use any type of annotation tool you prefer. The code shown here applies to Seurat objects</em></p>
 <p>First, we load our Seurat Object and extract homotypic barcodes. Homotypic barcodes represent barcodes only containing a single cell type according to RCTD.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -915,6 +944,11 @@
 <span class="va">homo_cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">homo_cells</span><span class="op">$</span><span class="va">barcodes</span>,<span class="va">homo_cells</span><span class="op">$</span><span class="va">celltype</span><span class="op">)</span></code></pre></div>
 <p>Next, we can select territories of interest. For this example, we compared the Cortex and the Thalamus. Note that the numerical values are the Vesalius territories you wish to select. We recommend checking the <code>territoryPlot</code> of your ST assay in split mode to select your territories.</p>
 <p>We will run the comparison on all homotypic beads. Not all cell type combinations will yield differential gene expression.</p>
+<p>This section produces:</p>
+<ul>
+<li><strong>Figure 4a</strong></li>
+<li>DEGs are provided in the supplementary material of the manuscript</li>
+</ul>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cortex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">8</span><span class="op">)</span>
 <span class="va">thalamus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>,<span class="fl">33</span><span class="op">)</span>
@@ -946,7 +980,7 @@
     <span class="va">by_cell</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">deg</span>
 <span class="op">}</span>
 <span class="va">by_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>,<span class="va">by_cell</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.table</a></span><span class="op">(</span><span class="va">by_cell</span>, file <span class="op">=</span> <span class="st">"vesalius_terComp_CortexVSThalamus.csv"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">by_cell</span>, file <span class="op">=</span> <span class="st">"vesalius_terComp_CortexVSThalamus.csv"</span><span class="op">)</span></code></pre></div>
 <p>Finally, we can plot the results. First, we plot all differentially expressed genes and from these we will select two examples.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
@@ -986,12 +1020,12 @@
 
 
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="co"># Selecting examples to plot</span>
+<span class="co"># Selecting examples to plot Figure 4a</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"vesalius_DEG_between_Ter.pdf"</span>,height <span class="op">=</span> <span class="fl">5</span>,width <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
 
 <span class="co">### Cpe in astrocytes</span>
-<span class="va">local</span> <span class="op">&lt;-</span> <span class="va">by_cell</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">genes</span> <span class="op">==</span> <span class="st">"Cpe"</span> <span class="op">&amp;</span> <span class="va">celltype</span> <span class="op">==</span> <span class="st">"Astrocyte+Astrocyte"</span><span class="op">)</span>
+<span class="va">local</span> <span class="op">&lt;-</span> <span class="va">by_cell</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">genes</span> <span class="op">==</span> <span class="st">"Cpe"</span> <span class="op">&amp;</span> <span class="va">celltype</span> <span class="op">==</span> <span class="st">"Astrocyte+Astrocyte"</span><span class="op">)</span>
 <span class="va">bar</span> <span class="op">&lt;-</span> <span class="va">homo_cells</span><span class="op">[[</span><span class="st">"Astrocyte+Astrocyte"</span><span class="op">]</span><span class="op">]</span>
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/viewCellExpression.html">viewCellExpression</a></span><span class="op">(</span>image <span class="op">=</span> <span class="va">imageBrain</span> ,
         counts <span class="op">=</span> <span class="va">brainNorm</span>,
@@ -1003,8 +1037,8 @@
         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Astrocyte - Cpe"</span><span class="op">)</span><span class="op">+</span>
         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_shape.html" class="external-link">scale_shape_discrete</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cortex"</span>, <span class="st">"Thalamus"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co">### Gad1 in interneuron</span>
-<span class="va">local</span> <span class="op">&lt;-</span> <span class="va">by_cell</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">genes</span> <span class="op">==</span> <span class="st">"Nrgn"</span> <span class="op">&amp;</span> <span class="va">celltype</span> <span class="op">==</span> <span class="st">"Entorhinal+Entorhinal"</span><span class="op">)</span>
+<span class="co">### Nrgn in Entorhinal</span>
+<span class="va">local</span> <span class="op">&lt;-</span> <span class="va">by_cell</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">genes</span> <span class="op">==</span> <span class="st">"Nrgn"</span> <span class="op">&amp;</span> <span class="va">celltype</span> <span class="op">==</span> <span class="st">"Entorhinal+Entorhinal"</span><span class="op">)</span>
 <span class="va">bar</span> <span class="op">&lt;-</span> <span class="va">homo_cells</span><span class="op">[[</span><span class="st">"Entorhinal+Entorhinal"</span><span class="op">]</span><span class="op">]</span>
 <span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/viewCellExpression.html">viewCellExpression</a></span><span class="op">(</span>image <span class="op">=</span> <span class="va">imageBrain</span> ,
         counts <span class="op">=</span> <span class="va">brainNorm</span>,
@@ -1023,6 +1057,11 @@
 <h2 id="tissue-border-expression">Tissue border expression<a class="anchor" aria-label="anchor" href="#tissue-border-expression"></a>
 </h2>
 <p>The isolation of territories in combination with the image representation of territories makes for an easy way to analyse gene expression pattern at the border between different tissues. For example, we analysed the expression patterns at the border between the Dentate Gyrus Granule Cell Layer and the Dentate Gyrus Sub Granular Zone.</p>
+<p>This section produces:</p>
+<ul>
+<li><strong>Figure 4b</strong></li>
+<li>DEGs are provided in the supplementary material of the manuscript</li>
+</ul>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Get territory and run clustering</span>
@@ -1030,10 +1069,10 @@
 <span class="va">DenCluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractTerritories.html">extractTerritories</a></span><span class="op">(</span><span class="va">imageBrain</span>, <span class="va">brainRaw</span>,
                                  seedID <span class="op">=</span> <span class="fl">26</span>,morphologyFactor <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>
 
-<span class="va">DenCluster</span> <span class="op">&lt;-</span> <span class="va">DenCluster</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-              <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">DenCluster</span> <span class="op">&lt;-</span> <span class="va">DenCluster</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">SCTransform</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"Spatial"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+              <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+              <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
               <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>resolution <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>
 
 <span class="co">#------------------------------------------------------------------------------#</span>
@@ -1042,12 +1081,12 @@
 <span class="co"># NOTE: for cell type annotation we used anatomical position as we just wanted</span>
 <span class="co"># overall territory not specific cell types</span>
 <span class="co">#------------------------------------------------------------------------------#</span>
-<span class="va">denMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">DenCluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">denMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span><span class="va">DenCluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
               <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">25</span>,wt<span class="op">=</span><span class="va">avg_log2FC</span><span class="op">)</span>
 
-<span class="va">denClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">DenCluster</span>,<span class="va">brainCounts</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">15</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
+<span class="va">denClusterMarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/extractClusterMarkers.html">extractClusterMarkers</a></span><span class="op">(</span><span class="va">DenCluster</span>,<span class="va">brainCounts</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span>
+                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">seedTerritory</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/imager/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">15</span>,wt <span class="op">=</span> <span class="va">logFC</span><span class="op">)</span>
 
 
 
@@ -1093,6 +1132,7 @@
                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">" "</span>, title <span class="op">=</span> <span class="st">" "</span>,
                            x <span class="op">=</span> <span class="st">" "</span>, y <span class="op">=</span> <span class="st">" "</span><span class="op">)</span></code></pre></div>
 <p>We can visualise the clustering results</p>
+<p><strong>Figure 4b</strong></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#pdf("DenMap.pdf", width =9, height=9)</span>
 <span class="va">coord_outer</span>
@@ -1102,6 +1142,11 @@
 <h2 id="tissue-layering">Tissue Layering<a class="anchor" aria-label="anchor" href="#tissue-layering"></a>
 </h2>
 <p>Vesalius provides a way to layer a territory and investigate gene expression difference between layers. In the manuscript, we isolated the Corpus Callosum and applied morphological operators to fill in the holes and gaps. Then, we layered this isolated territory and after extracting layer specific genes, we found the Kif5a and Stmn4 genes that were highly expressed in the inner layers of the Corpus Callosum.</p>
+<p>This sections produces:</p>
+<ul>
+<li><strong>Figure 4d</strong></li>
+<li>DEGs are provided in the supplementary material</li>
+</ul>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># First step is to dilate the territory to fill in gaps and consider</span>
@@ -1125,6 +1170,9 @@
 <span class="va">Layeredsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Layeredsc</span> ,<span class="va">logFC</span> <span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span>
 
 
+<span class="co">#------------------------------------------------------------------------------#</span>
+<span class="co"># Plotting Figure 4d</span>
+<span class="co">#------------------------------------------------------------------------------#</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"Kif5a.pdf"</span>,width<span class="op">=</span><span class="fl">9</span>,height<span class="op">=</span><span class="fl">7</span><span class="op">)</span>
 <span class="va">scPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/viewLayerExpression.html">viewLayerExpression</a></span><span class="op">(</span><span class="va">sc</span>,<span class="va">brainNorm</span>,genes <span class="op">=</span> <span class="st">"Kif5a"</span>,cex<span class="op">=</span><span class="fl">20</span><span class="op">)</span><span class="op">+</span>
           <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
@@ -1152,9 +1200,13 @@
 <div class="section level2">
 <h2 id="umap-vs-pca">UMAP vs PCA<a class="anchor" aria-label="anchor" href="#umap-vs-pca"></a>
 </h2>
-<p>In the section, we will aim to demonstrate the differences between using UMAP or PCA embeddings in your color images.</p>
-<p>The main aspect to consider is how much data is being included in the image. UMAP projections can contain an arbitrary number of PCs and in turn this means that more of the data can be included into the final images. While this does sound like a good thing, it also means that more subtle patterns might be merged together in color space.</p>
-<p>PCA slices - on the other hand - can only show 3 PCs at a time to create RGB images. Obvisouly, in this case there is less information included in the final image. However, this generates images that emphasise different part of the ST assay. We can use these different slices and images to explores different sections of the ST assay and focus our attention on different territories.</p>
+<p>In the section, we aim to demonstrate the differences between using UMAP or PCA embeddings in your color images.</p>
+<p>The main aspect to consider is how much data is being included in the image. UMAP projections can contain an arbitrary number of PCs and in turn this means that more <em>information</em> can be included into the final images. While this does sound like a good thing, it also means that more subtle patterns might be merged together in color space.</p>
+<p>PCA slices - on the other hand - can only show 3 PCs at a time to create RGB images. Obviously, in this case there is less <em>information</em> included in the final image. However, this generates images that emphasise different part of the ST assay. We can use these different slices and images to explores different sections of the ST assay and focus our attention on different territories.</p>
+<p>This section produces:</p>
+<ul>
+<li><strong>Figure S2</strong></li>
+</ul>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Using slide-seq data sets</span>
@@ -1268,13 +1320,12 @@
   <span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="op">}</span></code></pre></div>
-<p>As seen in these figures, images generated in the embryo show a extremely diverse set of territories between PC slices compared to the brain. The approach provided by Vesalius enables a different way of gaining insight into ST assays. The use of PCA instead of UMAP projections decomposes the variance contained in the ST assay into smaller sections that can easily be visualised. We hope that this approach can contribute to really capitalising on the information contained in high resolution ST data sets.</p>
+<p>As seen in these figures, images generated in the embryo show a extremely diverse set of territories between PC slices compared to the brain. The approach provided by Vesalius enables a different way of gaining insight into ST assays. The use of PCA instead of UMAP projections decomposes the variance contained in the ST assay into smaller sections that can easily be visualised. We hope that this approach can contribute to capitalising on the information contained in high resolution ST data sets.</p>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>We hope that this has given you insights into how Vesalius works and what you can do with this tool. All figures produced here are the ones used in the manuscript. Figures related to benchmarking and simulations are produced with the script found (here)[]</p>
-<p>All ISH images are taken from the Allen Brain Atlas.</p>
+<p>We hope that this has given you insights into how Vesalius works and what you can do with this tool. All figures produced here are the ones used in the manuscript. All ISH images are taken from the Allen Brain Atlas.</p>
 </div>
   </div>
 

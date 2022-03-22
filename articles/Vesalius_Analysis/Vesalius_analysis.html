@@ -296,7 +296,10 @@
 <h3 id="vesalius-image-and-territory-visualisation">Vesalius Image and Territory visualisation<a class="anchor" aria-label="anchor" href="#vesalius-image-and-territory-visualisation"></a>
 </h3>
 <p>Both image arrays and territories can be visualised using Vesalius plotting functions. Please note that these functions are minimalistic: we assume that users might want to use their own plotting style and this is straight forward as the output of all Vesalius functions are simple data frames. Feel free to use which ever tool you prefer to visualise your data.</p>
-<p>The figure produce here is <strong>Figure 2A</strong> in the manuscript.</p>
+<p>This section produces:</p>
+<ul>
+<li><strong>Figure 2a</strong></li>
+</ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># IMPORTANT: the "split" show all territories separately - it just makes</span>
@@ -545,7 +548,10 @@
             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">" "</span>, title <span class="op">=</span> <span class="st">""</span>,
                 x <span class="op">=</span> <span class="st">"X coordinates"</span>, y <span class="op">=</span> <span class="st">"Y coordinates"</span><span class="op">)</span></code></pre></div>
 <p>Finally, we can visualise cell clustering in isolated territories</p>
-<p><strong>Figure 3a and Figure 3d</strong></p>
+<ul>
+<li><strong>Figure 3a</strong></li>
+<li><strong>Figure 3d</strong></li>
+</ul>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#pdf("SSV2_Brain_IsolatedTerritory.pdf", width = 10, height= 5)</span>
 <span class="va">coord_CA</span> <span class="op">/</span> <span class="va">coord_med</span>
@@ -703,7 +709,9 @@
 </h3>
 <p>Vesalius is able to handle any type of spatial transcriptomic data as long as there are coordinates and gene counts provided. Here, we demonstrate Vesalius ability to recover tissue territories in another high resolution Spatial transcriptomics assay SeqScope. SeqScope data is available <a href="https://deepblue.lib.umich.edu/data/concern/data_sets/9c67wn05f" class="external-link">here</a>. The SeqScope team provide process spatial data sets in the form of <code>.rds</code>files containing Seurat objects as well as H&amp;E images. An important aspect to consider when working with these datasets, is that they may contain more than one “slice”. As each data set has already been pre-processed, we do not need to pre-process the data again.</p>
 <p>This section produces:</p>
-<p><strong>Figure 2e</strong></p>
+<ul>
+<li><strong>Figure 2e</strong></li>
+</ul>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Load data set</span>
@@ -763,7 +771,9 @@
 </h3>
 <p>We can apply the same process as described above but for the SeqScope Colon data set. The <code>.rds</code> files also contains more than one slice.</p>
 <p>This section produces:</p>
-<p><strong>Figure 2f</strong></p>
+<ul>
+<li><strong>Figure 2f</strong></li>
+</ul>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#------------------------------------------------------------------------------#</span>
 <span class="co"># Load data set</span>
@@ -893,7 +903,9 @@
 </h3>
 <p>We can also visualise differentially expressed genes between layers in the eye.</p>
 <p>This section produces:</p>
-<p><strong>Figure 3h</strong></p>
+<ul>
+<li><strong>Figure 3h</strong></li>
+</ul>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Cryba4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/viewGeneExpression.html">viewGeneExpression</a></span><span class="op">(</span><span class="va">imageEmbryo</span>,<span class="va">eyeCluster</span>,
                              genes <span class="op">=</span> <span class="st">"Cryba4"</span>,cex<span class="op">=</span><span class="fl">20</span><span class="op">)</span><span class="op">+</span>

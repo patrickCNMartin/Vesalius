@@ -66,16 +66,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">viewCellExpression</span><span class="op">(</span>
-  <span class="va">image</span>,
-  <span class="va">counts</span>,
-  <span class="va">cells</span>,
-  gene <span class="op">=</span> <span class="cn">NULL</span>,
-  ter1 <span class="op">=</span> <span class="cn">NULL</span>,
-  ter2 <span class="op">=</span> <span class="cn">NULL</span>,
-  normalise <span class="op">=</span> <span class="cn">FALSE</span>,
-  cex <span class="op">=</span> <span class="fl">10</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">viewCellExpression</span><span class="op">(</span></span>
+<span>  <span class="va">image</span>,</span>
+<span>  <span class="va">counts</span>,</span>
+<span>  <span class="va">cells</span>,</span>
+<span>  gene <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ter1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ter2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  normalise <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -83,28 +83,45 @@
     <dl><dt>image</dt>
 <dd><p>a Vesalius data frame containing barcodes, x, y, cc, value,
 cluster, and territory.</p></dd>
+
+
 <dt>counts</dt>
 <dd><p>count matrix - either matrix, sparse matrix or seurat object
 This matrix should contain genes as rownames and cells/barcodes as colnames</p></dd>
+
+
 <dt>cells</dt>
 <dd><p>- character vector containing cells of interest.</p></dd>
+
+
 <dt>ter1</dt>
 <dd><p>vector/integer - Territory ID in which gene expression will be viewed.
 See details.</p></dd>
+
+
 <dt>ter2</dt>
 <dd><p>vector/integer - Territory ID in which gene expression will be viewed.
 See details.</p></dd>
+
+
 <dt>normalise</dt>
 <dd><p>logical - If TRUE, gene expression values will be min/max
 normalised.</p></dd>
+
+
 <dt>cex</dt>
 <dd><p>numeric - font size modulator</p></dd>
+
+
 <dt>genes</dt>
 <dd><p>character - gene of interest (only on gene at a time)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a ggplot object</p>
+    
+
+<p>a ggplot object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -125,24 +142,24 @@ Supplying territories to both will contrast expression between territories</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Seurat pre-processing</span></span>
-<span class="r-in"><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">image</span>, nfeatures <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">image</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># converting to rgb</span></span>
-<span class="r-in"><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="rgbPCA.html">rgbPCA</a></span><span class="op">(</span><span class="va">image</span>,slices <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="buildImageArray.html">buildImageArray</a></span><span class="op">(</span><span class="va">image</span>, sliceID<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># One segmentation round</span></span>
-<span class="r-in"><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="iterativeSegmentation.array.html">iterativeSegmentation.array</a></span><span class="op">(</span><span class="va">image</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="isolateTerritories.array.html">isolateTerritories.array</a></span><span class="op">(</span><span class="va">image</span>, minBar <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># For the example we will take a random selection of barcodes</span></span>
-<span class="r-in"><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">GetAssayData</span><span class="op">(</span><span class="va">vesalius</span>, slot <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span>, <span class="fl">200</span>, replace <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">viewCellExpression</span><span class="op">(</span><span class="va">image</span>, <span class="va">vesalius</span>,<span class="va">cells</span>,</span>
-<span class="r-in">                        gene <span class="op">=</span> <span class="st">"Cst3"</span>,ter1 <span class="op">=</span> <span class="fl">1</span>,ter2<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Seurat pre-processing</span></span></span>
+<span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">image</span>, nfeatures <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">image</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># converting to rgb</span></span></span>
+<span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="rgbPCA.html">rgbPCA</a></span><span class="op">(</span><span class="va">image</span>,slices <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="buildImageArray.html">buildImageArray</a></span><span class="op">(</span><span class="va">image</span>, sliceID<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># One segmentation round</span></span></span>
+<span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="iterativeSegmentation.array.html">iterativeSegmentation.array</a></span><span class="op">(</span><span class="va">image</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="isolateTerritories.array.html">isolateTerritories.array</a></span><span class="op">(</span><span class="va">image</span>, minBar <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># For the example we will take a random selection of barcodes</span></span></span>
+<span class="r-in"><span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">GetAssayData</span><span class="op">(</span><span class="va">vesalius</span>, slot <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span>, <span class="fl">200</span>, replace <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">viewCellExpression</span><span class="op">(</span><span class="va">image</span>, <span class="va">vesalius</span>,<span class="va">cells</span>,</span></span>
+<span class="r-in"><span>                        gene <span class="op">=</span> <span class="st">"Cst3"</span>,ter1 <span class="op">=</span> <span class="fl">1</span>,ter2<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -157,7 +174,7 @@ Supplying territories to both will contrast expression between territories</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

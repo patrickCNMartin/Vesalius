@@ -379,10 +379,19 @@
 <span><span class="fu"><a href="../../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">imageBrain</span>,as.cimg <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">imageBrain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/smoothArray.html">smoothArray</a></span><span class="op">(</span><span class="va">imageBrain</span>,</span>
+<span>                          iter <span class="op">=</span> <span class="fl">20</span> ,</span>
+<span>                          method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"box"</span><span class="op">)</span>,</span>
+<span>                          sigma <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                          box <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"smooth_brain.pdf"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">imageBrain</span>,as.cimg<span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">imageBrain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/iterativeSegmentation.array.html">iterativeSegmentation.array</a></span><span class="op">(</span><span class="va">imageBrain</span>, colDepth <span class="op">=</span><span class="fl">11</span>,</span>
-<span>                                          smoothIter <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                                          method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"box"</span><span class="op">)</span>,</span>
-<span>                                          sigma<span class="op">=</span><span class="fl">1</span>,box <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>                                          smoothIter <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                          method <span class="op">=</span> <span class="st">"box"</span>,</span>
+<span>                                          box <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                                          useCenter <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"seg_brain.pdf"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">imageBrain</span>,as.cimg <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
@@ -612,12 +621,19 @@
 <span><span class="fu"><a href="../../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">imageEmbryo</span>,as.cimg <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">imageEmbryo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/smoothArray.html">smoothArray</a></span><span class="op">(</span><span class="va">imageEmbryo</span>,</span>
+<span>                           iter <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                           method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"box"</span><span class="op">)</span>,</span>
+<span>                           sigma <span class="op">=</span><span class="fl">1</span>,</span>
+<span>                           box <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"smooth_embryo.pdf"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">imageEmbryo</span>,as.cimg <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">imageEmbryo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/iterativeSegmentation.array.html">iterativeSegmentation.array</a></span><span class="op">(</span><span class="va">imageEmbryo</span>,</span>
 <span>                                           colDepth <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>                                           smoothIter <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                                           method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"box"</span><span class="op">)</span>,</span>
-<span>                                           sigma <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                                           box <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                                           smoothIter <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                           method <span class="op">=</span> <span class="st">"box"</span>,</span>
+<span>                                           box <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                                           useCenter<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"seg_embryo.pdf"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">imageEmbryo</span>,as.cimg <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>

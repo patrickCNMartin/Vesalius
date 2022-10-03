@@ -165,18 +165,13 @@ queryTerritory (territory used as group 2)</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>extractMarkers compares a set of selected territories to another set
-of selected territories. If one of territory sets does not contain enough
-barcodes, <code>extractMarkers</code> will return NULL.</p>
-<p>A seed territory (or territories) should always be
-provided. Query territories can be left as the default NULL. In this case,
-the seed territory will be compared to all remaining barcodes that are NOT
-present in the seed. Otherwise, seed territories will be compared to query
-territories after any morphological operations
-(see <code>territoryMorphology</code>.</p>
-<p>compareCells provides a way to manipulate each set of territories
-independtly as described in <code>morphologyFactorSeed</code> and
-<code>morphologyFactorQuery.</code></p>
+    <p>compareCells provides a way to compare the expression of cells
+between different territories. If you have a cell type annotations associated
+to each of the barcodes present in your data, you can select your cell 
+type of interest and parse the barcodes to the compareCell function.</p>
+<p>Vesalius will internally subset your data and only compare
+barcodes present in your territories of interest for differential 
+gene expressioon.</p>
 <p>The cells argument should be supplied as a vector of barcodes containing
 all barcodes of the cell type of interest. Theoretically, you can supply
 more than one cell type in this vector but Vesalius will treat them as single

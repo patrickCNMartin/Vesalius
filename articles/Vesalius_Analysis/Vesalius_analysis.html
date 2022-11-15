@@ -82,7 +82,8 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Vesalius Manuscript Analysis</h1>
-                        <h4 data-toc-skip class="author">Patrick C.N. Martin</h4>
+                        <h4 data-toc-skip class="author">Patrick C.N.
+Martin</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/patrickCNMartin/Vesalius/blob/main/vignettes/Vesalius_Analysis/Vesalius_analysis.Rmd" class="external-link"><code>vignettes/Vesalius_Analysis/Vesalius_analysis.Rmd</code></a></small>
@@ -95,15 +96,27 @@
 <div class="section level2">
 <h2 id="preface">Preface<a class="anchor" aria-label="anchor" href="#preface"></a>
 </h2>
-<p>The following file contains all code related to Spatial Transcriptomics analysis using Vesalius. While this file contains the code used to produce all analysis figures in the manuscript, the order of the code is somewhat different to that of the paper.</p>
-<p>We hope that this can also serve as a <em>vignette</em> describing various analysis possibilities provided by Vesalius. Each section or sub-section will indicate in which figure their respective output can be found.</p>
-<p>Please note that the code related to Vesalius benchmarking and comparison to other methods can be found <a href="https://github.com/patrickCNMartin/Vesalius/tree/main/methodComp" class="external-link">here</a>.</p>
+<p>The following file contains all code related to Spatial
+Transcriptomics analysis using Vesalius. While this file contains the
+code used to produce all analysis figures in the manuscript, the order
+of the code is somewhat different to that of the paper.</p>
+<p>We hope that this can also serve as a <em>vignette</em> describing
+various analysis possibilities provided by Vesalius. Each section or
+sub-section will indicate in which figure their respective output can be
+found.</p>
+<p>Please note that the code related to Vesalius benchmarking and
+comparison to other methods can be found <a href="https://github.com/patrickCNMartin/Vesalius/tree/main/methodComp" class="external-link">here</a>.</p>
 <p><strong>NOTE change path to files accordingly</strong></p>
 </div>
 <div class="section level2">
 <h2 id="set-up">Set up<a class="anchor" aria-label="anchor" href="#set-up"></a>
 </h2>
-<p>First, we will set up the R environment to run Vesalius. Note that some of the packages are Vesalius dependencies but for sake of clarity, they are also listed here. We also set a seed. Some functions (such as <code>kmeans</code>) requires random start points. This seed ensure that you will (hopefully) recover the same territories as we had in the paper.</p>
+<p>First, we will set up the R environment to run Vesalius. Note that
+some of the packages are Vesalius dependencies but for sake of clarity,
+they are also listed here. We also set a seed. Some functions (such as
+<code>kmeans</code>) requires random start points. This seed ensure that
+you will (hopefully) recover the same territories as we had in the
+paper.</p>
 <div class="section level3">
 <h3 id="libraries">Libraries<a class="anchor" aria-label="anchor" href="#libraries"></a>
 </h3>
@@ -136,8 +149,16 @@
 <div class="section level3">
 <h3 id="rgb-embeddings">RGB embeddings<a class="anchor" aria-label="anchor" href="#rgb-embeddings"></a>
 </h3>
-<p>The first step of the Vesalius algorithm is to load and pre-process spatial transcriptomic data. For this manuscript, we used slide-seqV2 data provided on the <a href="https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download" class="external-link">Single Cell Portal</a>. Our analysis mainly focused on the mouse brain and embryo (E12.5). We also used SeqScope data available <a href="https://deepblue.lib.umich.edu/data/concern/data_sets/9c67wn05f" class="external-link">here</a>. Please note that the SeqScope dataset have already be preprocess and do not require further processing.</p>
-<p>Once the data has been loaded and pre-processed (log normalisation, scaling, Finding variable features - handled by Seurat), the data can be parsed to Vesalius for embedding into the RGB colour space.</p>
+<p>The first step of the Vesalius algorithm is to load and pre-process
+spatial transcriptomic data. For this manuscript, we used slide-seqV2
+data provided on the <a href="https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download" class="external-link">Single
+Cell Portal</a>. Our analysis mainly focused on the mouse brain and
+embryo (E12.5). We also used SeqScope data available <a href="https://deepblue.lib.umich.edu/data/concern/data_sets/9c67wn05f" class="external-link">here</a>.
+Please note that the SeqScope dataset have already be preprocess and do
+not require further processing.</p>
+<p>Once the data has been loaded and pre-processed (log normalisation,
+scaling, Finding variable features - handled by Seurat), the data can be
+parsed to Vesalius for embedding into the RGB colour space.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span><span class="co"># Only 2 pucks were used - but ultimately you can add as many as you want</span></span>
@@ -227,9 +248,20 @@
 <div class="section level3">
 <h3 id="image-array-creation">Image Array Creation<a class="anchor" aria-label="anchor" href="#image-array-creation"></a>
 </h3>
-<p>The next step uses the data frames generated above to build image arrays. If you have saved the data frame above, you can directly load that data frame. This function converts punctual coordinate locations into tiles. Each tile is then rasterised to include all possible pixel locations and assigned its colour code to it. We will only use one of the arrays as an example. The analysis of both Slide-seq data is shown below.</p>
-<p>You will notice below that two of the arguments contain the key word “filter”. <code>filterGrid</code> removes stray beads and <code>filterThreshold</code> removes any tiles that might be to large (i.e tiles that fill gaps in the ST assay).</p>
-<p>The resolution argument changes the resolution of the output image. Smaller Images decrease run time. The image resolution may be decreased but all beads are still retained.</p>
+<p>The next step uses the data frames generated above to build image
+arrays. If you have saved the data frame above, you can directly load
+that data frame. This function converts punctual coordinate locations
+into tiles. Each tile is then rasterised to include all possible pixel
+locations and assigned its colour code to it. We will only use one of
+the arrays as an example. The analysis of both Slide-seq data is shown
+below.</p>
+<p>You will notice below that two of the arguments contain the key word
+“filter”. <code>filterGrid</code> removes stray beads and
+<code>filterThreshold</code> removes any tiles that might be to large
+(i.e tiles that fill gaps in the ST assay).</p>
+<p>The resolution argument changes the resolution of the output image.
+Smaller Images decrease run time. The image resolution may be decreased
+but all beads are still retained.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span><span class="co"># Loading saved data frame after PCA to RGB conversion</span></span>
@@ -251,15 +283,32 @@
 <div class="section level3">
 <h3 id="image-processing">Image processing<a class="anchor" aria-label="anchor" href="#image-processing"></a>
 </h3>
-<p>The first step in this section of the analysis will be to regularise the image via <a href="https://cran.rstudio.com/web/packages/tvR/tvR.pdf" class="external-link">Total Variance Regularisation</a>. Vesalius also offers the possibility to equalise color histograms to increase contrast between territories. This process is not always required and is better suited for PCA embeddings. See section on PCA embeddings below.</p>
+<p>The first step in this section of the analysis will be to regularise
+the image via <a href="https://cran.rstudio.com/web/packages/tvR/tvR.pdf" class="external-link">Total Variance
+Regularisation</a>. Vesalius also offers the possibility to equalise
+color histograms to increase contrast between territories. This process
+is not always required and is better suited for PCA embeddings. See
+section on PCA embeddings below.</p>
 <p>The higher the lambda the smoother the output.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">imageBrain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/regulariseImage.html">regulariseImage</a></span><span class="op">(</span><span class="va">imageBrain</span>,</span>
 <span>                              lambda <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>                              niter <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>                              normalise<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, we will iteratively segment the image. This is achieved by the <code>iterativeSegmentation.array</code> that offers quite a few different options. As this function uses kmeans clustering to generate color segments, the <code>colDepth</code> argument define the number of final colour you wish to have. This function can take multiple values for <code>colDepth</code>. Essentially, the image will first be smoothed and then segmented into <code>k</code>colors. Then, another round of smoothing will be applied followed by another round of segmentation. This will be repeated for every value of <code>k</code>. In this context, we highly recommend using a <code>colDepth</code> with decreasing values (e.g. <code>seq(12,6, by = -2)</code>).</p>
-<p><strong>Image smoothing is handle within the segmentation function. If you wish to smooth independently, please use the <code>smoothArray</code>function.</strong></p>
+<p>Finally, we will iteratively segment the image. This is achieved by
+the <code>iterativeSegmentation.array</code> that offers quite a few
+different options. As this function uses kmeans clustering to generate
+color segments, the <code>colDepth</code> argument define the number of
+final colour you wish to have. This function can take multiple values
+for <code>colDepth</code>. Essentially, the image will first be smoothed
+and then segmented into <code>k</code>colors. Then, another round of
+smoothing will be applied followed by another round of segmentation.
+This will be repeated for every value of <code>k</code>. In this
+context, we highly recommend using a <code>colDepth</code> with
+decreasing values (e.g. <code>seq(12,6, by = -2)</code>).</p>
+<p><strong>Image smoothing is handle within the segmentation function.
+If you wish to smooth independently, please use the
+<code>smoothArray</code>function.</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span><span class="co"># colDepth = number of colour segments</span></span>
@@ -276,12 +325,24 @@
 <span>                                          method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"box"</span><span class="op">)</span>,</span>
 <span>                                          sigma<span class="op">=</span><span class="fl">1</span>,box <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>                                          useCenter <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p>The parameters selected during this process will affect the number final territories. While case by case parameter selection would optimised the final number of territories, we have noticed that these parameters are more closely tied to ST method. We used the same parameters for all data sets produced by the same ST method.</p>
+<p>The parameters selected during this process will affect the number
+final territories. While case by case parameter selection would
+optimised the final number of territories, we have noticed that these
+parameters are more closely tied to ST method. We used the same
+parameters for all data sets produced by the same ST method.</p>
 </div>
 <div class="section level3">
 <h3 id="territory-isolation">Territory Isolation<a class="anchor" aria-label="anchor" href="#territory-isolation"></a>
 </h3>
-<p>Vesalius takes an image containing colour segments and further separates them into distinct spatial territories. For each color segment, beads are pooled into a territory as long as they are within a certain <code>captureRadius</code> of other beads belonging to the same colour segment. If there are still beads remaining in that color segment, the process will be repeated until all beads have been pooled into a territory. Vesalius also considers that territories that fall under a certain threshold (defined by <code>minBar</code>) are isolated territories. All Isolated territories will be pooled together.</p>
+<p>Vesalius takes an image containing colour segments and further
+separates them into distinct spatial territories. For each color
+segment, beads are pooled into a territory as long as they are within a
+certain <code>captureRadius</code> of other beads belonging to the same
+colour segment. If there are still beads remaining in that color
+segment, the process will be repeated until all beads have been pooled
+into a territory. Vesalius also considers that territories that fall
+under a certain threshold (defined by <code>minBar</code>) are isolated
+territories. All Isolated territories will be pooled together.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span><span class="co"># captureRadius = proportion of maximum distance between two beads.</span></span>
@@ -294,7 +355,12 @@
 <div class="section level3">
 <h3 id="vesalius-image-and-territory-visualisation">Vesalius Image and Territory visualisation<a class="anchor" aria-label="anchor" href="#vesalius-image-and-territory-visualisation"></a>
 </h3>
-<p>Both image arrays and territories can be visualised using Vesalius plotting functions. Please note that these functions are minimalistic: we assume that users might want to use their own plotting style and this is straight forward as the output of all Vesalius functions are simple data frames. Feel free to use which ever tool you prefer to visualise your data.</p>
+<p>Both image arrays and territories can be visualised using Vesalius
+plotting functions. Please note that these functions are minimalistic:
+we assume that users might want to use their own plotting style and this
+is straight forward as the output of all Vesalius functions are simple
+data frames. Feel free to use which ever tool you prefer to visualise
+your data.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 3a</strong></li>
@@ -325,11 +391,16 @@
 <div class="section level2">
 <h2 id="isolating-vesalius-territories-for-in-depth-analysis">Isolating Vesalius Territories for in depth analysis<a class="anchor" aria-label="anchor" href="#isolating-vesalius-territories-for-in-depth-analysis"></a>
 </h2>
-<p>In this section, we will focus on the creation and manipulation of Vesalius images in order to produce territories used for in depth analysis. We are assuming that you have already run the embedding functions and potentially saved the embeddings intermediate file.</p>
+<p>In this section, we will focus on the creation and manipulation of
+Vesalius images in order to produce territories used for in depth
+analysis. We are assuming that you have already run the embedding
+functions and potentially saved the embeddings intermediate file.</p>
 <div class="section level3">
 <h3 id="slide-seqv2---mouse-hippocampus">Slide-SeqV2 - Mouse Hippocampus<a class="anchor" aria-label="anchor" href="#slide-seqv2---mouse-hippocampus"></a>
 </h3>
-<p>First, we load and process the mouse hippocampus data set taken from Slide-Seq. We are using <em>Puck_200115_08</em> for this section of the work.</p>
+<p>First, we load and process the mouse hippocampus data set taken from
+Slide-Seq. We are using <em>Puck_200115_08</em> for this section of the
+work.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure S3a</strong></li>
@@ -399,7 +470,11 @@
 <span><span class="va">imageBrain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/isolateTerritories.array.html">isolateTerritories.array</a></span><span class="op">(</span><span class="va">imageBrain</span>,</span>
 <span>                                        captureRadius <span class="op">=</span> <span class="fl">0.008</span>,</span>
 <span>                                        minBar <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p>Once the data has been processed, we can select territories for in depth analysis. We recommend using the <code>territoryPlot</code> function with the <code>split</code> argument set to <code>TRUE</code> to better visualise and select the desired territories. Here we will use both raw counts and processed counts.</p>
+<p>Once the data has been processed, we can select territories for in
+depth analysis. We recommend using the <code>territoryPlot</code>
+function with the <code>split</code> argument set to <code>TRUE</code>
+to better visualise and select the desired territories. Here we will use
+both raw counts and processed counts.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 4a</strong></li>
@@ -580,7 +655,10 @@
 <div class="section level3">
 <h3 id="slide-seqv2---mouse-embryo-e12-5">Slide-SeqV2 - Mouse Embryo (E12.5)<a class="anchor" aria-label="anchor" href="#slide-seqv2---mouse-embryo-e12-5"></a>
 </h3>
-<p>We applied the same principles in the mouse embryo as in the mouse hippocampus. Here, we are using <em>Puck_190926_03</em>. If you have not saved the RGB embedding file please run the embedding section first and substitute object/files accordingly.</p>
+<p>We applied the same principles in the mouse embryo as in the mouse
+hippocampus. Here, we are using <em>Puck_190926_03</em>. If you have not
+saved the RGB embedding file please run the embedding section first and
+substitute object/files accordingly.</p>
 <p>The following section produces:</p>
 <ul>
 <li><strong>Figure 3c</strong></li>
@@ -657,7 +735,9 @@
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Embryo.pdf"</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">7</span>, height<span class="op">=</span><span class="fl">5.5</span><span class="op">)</span></span>
 <span><span class="va">imgTerritoryEm</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>In the embryo, we isolated the eye for in depth analysis. The principles applied in hippocampus still apply here. The DEG are included in the supplementary material of the manuscript.</p>
+<p>In the embryo, we isolated the eye for in depth analysis. The
+principles applied in hippocampus still apply here. The DEG are included
+in the supplementary material of the manuscript.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span><span class="co"># Extract territories</span></span>
@@ -740,7 +820,17 @@
 <div class="section level3">
 <h3 id="seqscope---liver">SeqScope - Liver<a class="anchor" aria-label="anchor" href="#seqscope---liver"></a>
 </h3>
-<p>Vesalius is able to handle any type of spatial transcriptomic data as long as there are coordinates and gene counts provided. Here, we demonstrate Vesalius ability to recover tissue territories in another high resolution Spatial transcriptomics assay SeqScope. SeqScope data is available <a href="https://deepblue.lib.umich.edu/data/concern/data_sets/9c67wn05f" class="external-link">here</a>. The SeqScope team provide process spatial data sets in the form of <code>.rds</code>files containing Seurat objects as well as H&amp;E images. An important aspect to consider when working with these datasets, is that they may contain more than one “slice”. As each data set has already been pre-processed, we do not need to pre-process the data again.</p>
+<p>Vesalius is able to handle any type of spatial transcriptomic data as
+long as there are coordinates and gene counts provided. Here, we
+demonstrate Vesalius ability to recover tissue territories in another
+high resolution Spatial transcriptomics assay SeqScope. SeqScope data is
+available <a href="https://deepblue.lib.umich.edu/data/concern/data_sets/9c67wn05f" class="external-link">here</a>.
+The SeqScope team provide process spatial data sets in the form of
+<code>.rds</code>files containing Seurat objects as well as H&amp;E
+images. An important aspect to consider when working with these
+datasets, is that they may contain more than one “slice”. As each data
+set has already been pre-processed, we do not need to pre-process the
+data again.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 3e</strong></li>
@@ -811,7 +901,9 @@
 <div class="section level3">
 <h3 id="seqscope---colon">SeqScope - Colon<a class="anchor" aria-label="anchor" href="#seqscope---colon"></a>
 </h3>
-<p>We can apply the same process as described above but for the SeqScope Colon data set. The <code>.rds</code> files also contains more than one slice.</p>
+<p>We can apply the same process as described above but for the SeqScope
+Colon data set. The <code>.rds</code> files also contains more than one
+slice.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 3f</strong></li>
@@ -884,7 +976,12 @@
 <div class="section level3">
 <h3 id="seqfish---embryo">SeqFISH - Embryo<a class="anchor" aria-label="anchor" href="#seqfish---embryo"></a>
 </h3>
-<p>We also tested Vesalius in seqFISH data taken from <a href="https://content.cruk.cam.ac.uk/jmlab/SpatialMouseAtlas2020/" class="external-link">here</a>. To run Vesalius, we first create a Seurat object. As Seurat does not handle seqFISH data yet, we created a “slide-seq”-like object to handle coordinates. This does not affect in anyway the downstream analysis. It only serve as a way of handling the data internally. We ran Vesalius on all 3 seqFISH embryo data sets available.</p>
+<p>We also tested Vesalius in seqFISH data taken from <a href="https://content.cruk.cam.ac.uk/jmlab/SpatialMouseAtlas2020/" class="external-link">here</a>.
+To run Vesalius, we first create a Seurat object. As Seurat does not
+handle seqFISH data yet, we created a “slide-seq”-like object to handle
+coordinates. This does not affect in anyway the downstream analysis. It
+only serve as a way of handling the data internally. We ran Vesalius on
+all 3 seqFISH embryo data sets available.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 3g</strong></li>
@@ -1009,7 +1106,8 @@
 <div class="section level3">
 <h3 id="visium-10x---mouse-brain-sp">Visium 10X - Mouse Brain SP<a class="anchor" aria-label="anchor" href="#visium-10x---mouse-brain-sp"></a>
 </h3>
-<p>To demonstrate the wide applicability of Vesalius, we also ran Vesalius on 10X Visium mouse brain data.</p>
+<p>To demonstrate the wide applicability of Vesalius, we also ran
+Vesalius on 10X Visium mouse brain data.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 3h</strong></li>
@@ -1129,7 +1227,8 @@
 <div class="section level3">
 <h3 id="visium-10x---human-breast">Visium 10X - Human Breast<a class="anchor" aria-label="anchor" href="#visium-10x---human-breast"></a>
 </h3>
-<p>For a final example in Visium data, We also applied Vesalius in Human breast.</p>
+<p>For a final example in Visium data, We also applied Vesalius in Human
+breast.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 3j</strong></li>
@@ -1196,7 +1295,11 @@
 <div class="section level3">
 <h3 id="expression-pattern-in-the-isolated-ca-field">Expression Pattern in the isolated CA Field<a class="anchor" aria-label="anchor" href="#expression-pattern-in-the-isolated-ca-field"></a>
 </h3>
-<p>We showed that we recovered the CA2 field in isolated CA territory. This was due to the fact that we could recover subtle gene expression patterns that were otherwise lost or overshadowed by stronger patterns. In this section, we show how we can visualise these expression patterns.</p>
+<p>We showed that we recovered the CA2 field in isolated CA territory.
+This was due to the fact that we could recover subtle gene expression
+patterns that were otherwise lost or overshadowed by stronger patterns.
+In this section, we show how we can visualise these expression
+patterns.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 4c</strong></li>
@@ -1262,7 +1365,8 @@
 <div class="section level3">
 <h3 id="expression-patterns-in-the-isolated-eye">Expression Patterns in the Isolated Eye<a class="anchor" aria-label="anchor" href="#expression-patterns-in-the-isolated-eye"></a>
 </h3>
-<p>We can also visualise differentially expressed genes between layers in the eye.</p>
+<p>We can also visualise differentially expressed genes between layers
+in the eye.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 4h</strong></li>
@@ -1308,9 +1412,21 @@
 <div class="section level3">
 <h3 id="slide-seqv2---mouse-hippocampus-1">Slide-SeqV2 - Mouse Hippocampus<a class="anchor" aria-label="anchor" href="#slide-seqv2---mouse-hippocampus-1"></a>
 </h3>
-<p>Thanks to easy territory isolation, Vesalius can easily compare the expression of cells between different anatomical structures. Here, we present how we compared the expression of different cell types between anatomical structures in the mouse hippocampus. The data is taken from <em>Puck_200115_08</em>. First, we need to assign cell types to each barcode. In this instance, we used <a href="https://github.com/dmcable/spacexr" class="external-link">RCTD</a> to decompose cell types contained within each barcode and store annotations into a Seurat object.</p>
-<p><em>You do not need to use RCTD - you only need to assign cell types to the barcodes contained in your data. Feel free to use any type of annotation tool you prefer. The code shown here applies to Seurat objects</em></p>
-<p>First, we load our Seurat Object and extract homotypic barcodes. Homotypic barcodes represent barcodes only containing a single cell type according to RCTD.</p>
+<p>Thanks to easy territory isolation, Vesalius can easily compare the
+expression of cells between different anatomical structures. Here, we
+present how we compared the expression of different cell types between
+anatomical structures in the mouse hippocampus. The data is taken from
+<em>Puck_200115_08</em>. First, we need to assign cell types to each
+barcode. In this instance, we used <a href="https://github.com/dmcable/spacexr" class="external-link">RCTD</a> to decompose cell
+types contained within each barcode and store annotations into a Seurat
+object.</p>
+<p><em>You do not need to use RCTD - you only need to assign cell types
+to the barcodes contained in your data. Feel free to use any type of
+annotation tool you prefer. The code shown here applies to Seurat
+objects</em></p>
+<p>First, we load our Seurat Object and extract homotypic barcodes.
+Homotypic barcodes represent barcodes only containing a single cell type
+according to RCTD.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"/isilonsund/NextGenSeqData/project-data/hkim/ST_project/Slide-seq/Slide-seq_hippocampus.rds"</span><span class="op">)</span></span>
 <span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">ref</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">celltype</span>, <span class="st">"\\+"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -1318,12 +1434,18 @@
 <span><span class="va">homo_cells</span> <span class="op">&lt;-</span> <span class="va">ref</span><span class="op">@</span><span class="va">meta.data</span><span class="op">[</span><span class="va">ref</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">celltype</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">homo</span>,<span class="op">]</span></span>
 <span><span class="va">homo_cells</span><span class="op">$</span><span class="va">barcodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">homo_cells</span><span class="op">)</span></span>
 <span><span class="va">homo_cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">homo_cells</span><span class="op">$</span><span class="va">barcodes</span>,<span class="va">homo_cells</span><span class="op">$</span><span class="va">celltype</span><span class="op">)</span></span></code></pre></div>
-<p>Next, we can select territories of interest. For this example, we compared the Cortex and the Thalamus. Note that the numerical values are the Vesalius territories you wish to select. We recommend checking the <code>territoryPlot</code> of your ST assay in split mode to select your territories.</p>
-<p>We will run the comparison on all homotypic beads. Not all cell type combinations will yield differential gene expression.</p>
+<p>Next, we can select territories of interest. For this example, we
+compared the Cortex and the Thalamus. Note that the numerical values are
+the Vesalius territories you wish to select. We recommend checking the
+<code>territoryPlot</code> of your ST assay in split mode to select your
+territories.</p>
+<p>We will run the comparison on all homotypic beads. Not all cell type
+combinations will yield differential gene expression.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 5a</strong></li>
-<li>DEGs are provided in the supplementary material of the manuscript</li>
+<li>DEGs are provided in the supplementary material of the
+manuscript</li>
 </ul>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cortex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">8</span><span class="op">)</span></span>
@@ -1357,7 +1479,8 @@
 <span><span class="op">}</span></span>
 <span><span class="va">by_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>,<span class="va">by_cell</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">by_cell</span>, file <span class="op">=</span> <span class="st">"vesalius_terComp_CortexVSThalamus.csv"</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, we can plot the results. First, we plot all differentially expressed genes and from these we will select two examples.</p>
+<p>Finally, we can plot the results. First, we plot all differentially
+expressed genes and from these we will select two examples.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span><span class="co"># Plot everything</span></span>
@@ -1433,11 +1556,16 @@
 <div class="section level2">
 <h2 id="tissue-border-expression">Tissue border expression<a class="anchor" aria-label="anchor" href="#tissue-border-expression"></a>
 </h2>
-<p>The isolation of territories in combination with the image representation of territories makes for an easy way to analyse gene expression pattern at the border between different tissues. For example, we analysed the expression patterns at the border between the Dentate Gyrus Granule Cell Layer and the Dentate Gyrus Sub Granular Zone.</p>
+<p>The isolation of territories in combination with the image
+representation of territories makes for an easy way to analyse gene
+expression pattern at the border between different tissues. For example,
+we analysed the expression patterns at the border between the Dentate
+Gyrus Granule Cell Layer and the Dentate Gyrus Sub Granular Zone.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure 5b</strong></li>
-<li>DEGs are provided in the supplementary material of the manuscript</li>
+<li>DEGs are provided in the supplementary material of the
+manuscript</li>
 </ul>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------------------------------------------------------#</span></span>
@@ -1518,7 +1646,12 @@
 <div class="section level2">
 <h2 id="tissue-layering">Tissue Layering<a class="anchor" aria-label="anchor" href="#tissue-layering"></a>
 </h2>
-<p>Vesalius provides a way to layer a territory and investigate gene expression difference between layers. In the manuscript, we isolated the Corpus Callosum and applied morphological operators to fill in the holes and gaps. Then, we layered this isolated territory and after extracting layer specific genes, we found the Kif5a and Stmn4 genes that were highly expressed in the inner layers of the Corpus Callosum.</p>
+<p>Vesalius provides a way to layer a territory and investigate gene
+expression difference between layers. In the manuscript, we isolated the
+Corpus Callosum and applied morphological operators to fill in the holes
+and gaps. Then, we layered this isolated territory and after extracting
+layer specific genes, we found the Kif5a and Stmn4 genes that were
+highly expressed in the inner layers of the Corpus Callosum.</p>
 <p>This sections produces:</p>
 <ul>
 <li><strong>Figure 5d</strong></li>
@@ -1577,9 +1710,19 @@
 <div class="section level2">
 <h2 id="umap-vs-pca">UMAP vs PCA<a class="anchor" aria-label="anchor" href="#umap-vs-pca"></a>
 </h2>
-<p>In the section, we aim to demonstrate the differences between using UMAP or PCA embeddings in your color images.</p>
-<p>The main aspect to consider is how much data is being included in the image. UMAP projections can contain an arbitrary number of PCs and in turn this means that more <em>information</em> can be included into the final images. While this does sound like a good thing, it also means that more subtle patterns might be merged together in color space.</p>
-<p>PCA slices - on the other hand - can only show 3 PCs at a time to create RGB images. Obviously, in this case there is less <em>information</em> included in the final image. However, this generates images that emphasise different part of the ST assay. We can use these different slices and images to explores different sections of the ST assay and focus our attention on different territories.</p>
+<p>In the section, we aim to demonstrate the differences between using
+UMAP or PCA embeddings in your color images.</p>
+<p>The main aspect to consider is how much data is being included in the
+image. UMAP projections can contain an arbitrary number of PCs and in
+turn this means that more <em>information</em> can be included into the
+final images. While this does sound like a good thing, it also means
+that more subtle patterns might be merged together in color space.</p>
+<p>PCA slices - on the other hand - can only show 3 PCs at a time to
+create RGB images. Obviously, in this case there is less
+<em>information</em> included in the final image. However, this
+generates images that emphasise different part of the ST assay. We can
+use these different slices and images to explores different sections of
+the ST assay and focus our attention on different territories.</p>
 <p>This section produces:</p>
 <ul>
 <li><strong>Figure S2</strong></li>
@@ -1743,12 +1886,22 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>As seen in these figures, images generated in the embryo show a extremely diverse set of territories between PC slices compared to the brain. The approach provided by Vesalius enables a different way of gaining insight into ST assays. The use of PCA instead of UMAP projections decomposes the variance contained in the ST assay into smaller sections that can easily be visualised. We hope that this approach can contribute to capitalising on the information contained in high resolution ST data sets.</p>
+<p>As seen in these figures, images generated in the embryo show a
+extremely diverse set of territories between PC slices compared to the
+brain. The approach provided by Vesalius enables a different way of
+gaining insight into ST assays. The use of PCA instead of UMAP
+projections decomposes the variance contained in the ST assay into
+smaller sections that can easily be visualised. We hope that this
+approach can contribute to capitalising on the information contained in
+high resolution ST data sets.</p>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>We hope that this has given you insights into how Vesalius works and what you can do with this tool. All figures produced here are the ones used in the manuscript. All ISH images are taken from the Allen Brain Atlas.</p>
+<p>We hope that this has given you insights into how Vesalius works and
+what you can do with this tool. All figures produced here are the ones
+used in the manuscript. All ISH images are taken from the Allen Brain
+Atlas.</p>
 </div>
   </div>
 

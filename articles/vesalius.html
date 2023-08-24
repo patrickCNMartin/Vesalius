@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">vesalius</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -53,7 +53,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Vesalius_Analysis/Vesalius_analysis.html">Vesalius Manuscript Analysis</a>
+      <a href="../articles/Vesalius_Analysis/Spatial_DNA_seq.html">Vesalius: Spatial Genomics</a>
+    </li>
+    <li>
+      <a href="../articles/Vesalius_Analysis/Spatial_Transcriptomics.html">Vesalius: Spatial Transcriptomics</a>
+    </li>
+    <li>
+      <a href="../articles/Vesalius_Analysis/Vesalius_MSB_analysis.html">Vesalius: MSB Manuscript Analysis</a>
     </li>
   </ul>
 </li>
@@ -85,7 +91,7 @@
                         <h4 data-toc-skip class="author">Patrick C.N.
 Martin</h4>
             
-            <h4 data-toc-skip class="date">2023-07-31</h4>
+            <h4 data-toc-skip class="date">2023-08-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/patrickCNMartin/Vesalius/blob/main/vignettes/vesalius.Rmd" class="external-link"><code>vignettes/vesalius.Rmd</code></a></small>
       <div class="hidden name"><code>vesalius.Rmd</code></div>
@@ -103,8 +109,9 @@ a long vignette? Do you wish there was a TLDR on everything?</p>
 <p>Welcome to the Vesalius quick start!</p>
 <p>In this vignette, you will find a <strong>very</strong> short guide
 on how to work with Vesalius. Vesalius provides an internal data set
-taken from real Spatial transcrtiptomic data. For an in depth view of
-Vesalius, please refer to Vesalius_Analysis.Rmd.</p>
+taken from real Spatial transcrtiptomic data.</p>
+<p>We show <em>in context</em> Vesalius workflows in the articles
+section.</p>
 <p>For all intents and purposes, this is a dummy data set and should
 only be used to get a feel for the Vesalius package. We strongly advise
 you to use real and complete data sets to fully understand the Vesalius
@@ -114,172 +121,451 @@ package and its benefits.</p>
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>Vesalius is a tool to perform high-resolution in silico anatomization
-and molecular characterization from ST data without requiring companion
-images.</p>
-<p>This is achieved by converting ST data into images: PCA loading
-values are embedded into RGB colour channels by taking the sum of the
-absolute value of all loading values associated to each bead on the ST
-array.</p>
-<p>Image analysis techniques are applied to the image and anatomical
-territories can subsequently be extracted.</p>
+and molecular characterization from Spatial omices data without
+requiring companion images. The nature of the vesalius algorithm makes
+it condusive to being using on various spatial omics modalities without
+requiuring substantial changes.</p>
+<p>Vesalius achieves this by converting reducded dimensionality latent
+space into gray scale images (one of each dimension). These images are
+processed using various image analysis techniques such as smoothing and
+segmentation.</p>
 </div>
 <div class="section level2">
-<h2 id="loading">Loading<a class="anchor" aria-label="anchor" href="#loading"></a>
+<h2 id="loading-building-a-vesalius-assay">Loading &amp; building a vesalius assay<a class="anchor" aria-label="anchor" href="#loading-building-a-vesalius-assay"></a>
 </h2>
+<div class="section level3">
+<h3 id="loading-data">Loading data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
+</h3>
 <p>First, let’s load the package and the data. Data originates from
 slide-seqV2 data (availble at <a href="https://singlecell.broadinstitute.org/single_cell/study/SCP948/robust-decomposition-of-cell-type-mixtures-in-spatial-transcriptomics#study-download" class="external-link">Single
 Cell Portal</a>).</p>
-<p>For sake of simplicity, Vesalius takes a small subset of this data
-set and stores it in the form of a Seurat object.</p>
+<p>We took a small subset of the mouse hippocampus centered around the
+Dentate Gyrus.</p>
+<p>Here, we show an example using transcriptomic data but the same
+principles will apply for other modalities. For examples using other
+modalities, please refer to the other articles.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patrickcnmartin.github.io/Vesalius/">vesalius</a></span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: replacing previous import 'imager::where' by 'dplyr::where' when</span></span>
-<span><span class="co">## loading 'vesalius'</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vesalius</span>,package <span class="op">=</span> <span class="st">"vesalius"</span><span class="op">)</span></span>
-<span><span class="co"># First create a copy of raw data for later use</span></span>
-<span><span class="co"># For sake of simplicity we seperate counts from Vesalius images.</span></span>
-<span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="va">vesalius</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="pre-processing">Pre-processing<a class="anchor" aria-label="anchor" href="#pre-processing"></a>
-</h2>
-<p>Second, we pre-process the data using Seurat</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patrickcnmartin.github.io/Vesalius/">vesalius</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vesalius</span>, package <span class="op">=</span> <span class="st">"vesalius"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="what-do-we-have">What do we have?<a class="anchor" aria-label="anchor" href="#what-do-we-have"></a>
+</h4>
+<p>Once loaded we have two new variables: counts and cooridnates.</p>
+<p>The counts are the gene counts for all genes. As per convention,
+columns r epresent the spatial indices (barcodes, spots, beads,…) and
+rows are the genes that were captured.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Formal class 'dgCMatrix' [package "Matrix"] with 6 slots</span></span>
+<span><span class="co">##   ..@ i       : int [1:653622] 4 8 10 15 18 19 30 38 41 51 ...</span></span>
+<span><span class="co">##   ..@ p       : int [1:1053] 0 2982 6344 9623 12651 15540 18593 21462 24241 26859 ...</span></span>
+<span><span class="co">##   ..@ Dim     : int [1:2] 15932 1052</span></span>
+<span><span class="co">##   ..@ Dimnames:List of 2</span></span>
+<span><span class="co">##   .. ..$ : chr [1:15932] "0610005C13Rik" "0610007P14Rik" "0610009B22Rik" "0610009E02Rik" ...</span></span>
+<span><span class="co">##   .. ..$ : chr [1:1052] "CTCCAGCCTTGCAT" "AACCCCAAGGTAAT" "GCCCAACACACTTT" "GTCCAGAGTCTTAT" ...</span></span>
+<span><span class="co">##   ..@ x       : num [1:653622] 1 4 1 2 2 2 2 1 1 1 ...</span></span>
+<span><span class="co">##   ..@ factors : list()</span></span></code></pre>
+<p>The coordinates represent the x and y coordinates for each spatial
+index.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Preprocessing Spatial transcriptomic data with Seurat</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">vesalius</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span><span class="va">vesalius</span>, nfeatures <span class="op">=</span> <span class="fl">2000</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">vesalius</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">coordinates</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## 'data.frame':    1052 obs. of  3 variables:</span></span>
+<span><span class="co">##  $ barcodes: chr  "CTCCAGCCTTGCAT" "AACCCCAAGGTAAT" "GCCCAACACACTTT" "GTCCAGAGTCTTAT" ...</span></span>
+<span><span class="co">##  $ xcoord  : num  3536 3472 3634 3589 3535 ...</span></span>
+<span><span class="co">##  $ ycoord  : num  3485 3410 3636 3257 3352 ...</span></span></code></pre>
+<p>In other modalities, count matrices are still required for vesalius
+to run.</p>
+<p>For example, Spatial-ATAC-seq or Spatial-cut&amp;tag can be converted
+into count matrices (more specifically tile matrices) using the <a href="https://www.archrproject.com/" class="external-link">ArchR package</a></p>
 </div>
-<div class="section level2">
-<h2 id="emedding-into-rgb-colour-space">Emedding into RGB colour Space<a class="anchor" aria-label="anchor" href="#emedding-into-rgb-colour-space"></a>
-</h2>
-<p>Third, we convert a count matrix (stored in a Seurat object) to RGB
-coded coordinates. We will only produce one slice (i.e. PC1 to PC3).
-Alternatively, you can also choose to embed UMAP projections. In this
-case, there are no slices but only a number of Principal Components used
-for UMAP.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># PCA</span></span>
-<span><span class="va">vesaliusPCA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgbPCA.html">rgbPCA</a></span><span class="op">(</span><span class="va">vesalius</span>,slices <span class="op">=</span> <span class="fl">1</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># UMAP</span></span>
-<span><span class="va">vesaliusUMAP</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgbUMAP.html">rgbUMAP</a></span><span class="op">(</span><span class="va">vesalius</span>,pcs <span class="op">=</span> <span class="fl">30</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
-<span><span class="co">## To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
-<span><span class="co">## This message will be shown once per session</span></span></code></pre>
 </div>
-<div class="section level2">
-<h2 id="building-an-image">Building an Image<a class="anchor" aria-label="anchor" href="#building-an-image"></a>
-</h2>
-<p>Forth, we create an actual image by using a combination of Voronoi
-diagrams and tile rasterisation.</p>
+<div class="section level3">
+<h3 id="building-a-vesalius-assay">Building a Vesalius assay<a class="anchor" aria-label="anchor" href="#building-a-vesalius-assay"></a>
+</h3>
+<p>We can build a vesalius assay by simply parsing both counts and
+cooridnates to the (vesalius assay contructor)[link to manual page].</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_vesalius_assay.html">build_vesalius_assay</a></span><span class="op">(</span></span>
+<span>  coordinates <span class="op">=</span> <span class="va">coordinates</span>, <span class="co"># spatial coordinates</span></span>
+<span>  counts  <span class="op">=</span> <span class="va">counts</span>, <span class="co"># count matrix</span></span>
+<span>  assay <span class="op">=</span> <span class="st">"spatial_omics"</span>, <span class="co"># name you wish to give your assay</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># Do you want progress messages?</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="what-do-we-have-1">What do we have?<a class="anchor" aria-label="anchor" href="#what-do-we-have-1"></a>
+</h4>
+<p>A vesalius object is a container that requires at the very least
+spatial indices. Here, we parsed both counts and spatial indices</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/buildImageArray.html">buildImageArray</a></span><span class="op">(</span><span class="va">vesaliusPCA</span>,</span>
-<span>                            sliceID <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                            filterGrid<span class="op">=</span><span class="fl">1</span>,</span>
-<span>                            invert <span class="op">=</span><span class="cn">T</span>,</span>
-<span>                            verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># Let's have a look shall we?</span></span>
-<span><span class="va">Vesalius_image</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/imagePlot.html">imagePlot</a></span><span class="op">(</span><span class="va">vesalius</span>,as.cimg <span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span> </span>
-<span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Vesalius_image</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vesalius_files/figure-html/buildImage-1.png" width="576"></p>
+<code class="sourceCode R"><span><span class="va">vesalius</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## spatial_omics as vesalius assay containing:</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1 modifications applied to base object. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1052 spatial indices. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 15932 observations in the raw count matrix. </span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+<p>Count matrices can be added sperately using the
+<code>add_counts</code> function. For more information, please refere to
+the <a href="">Modifying vesalius objects</a></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="interoperability">Interoperability<a class="anchor" aria-label="anchor" href="#interoperability"></a>
+</h3>
+<p>UNDER CONSTRCUTION!</p>
+<p>We are currently working on making Vesalis fully compatible with
+SpatialFeatureExperiments, SingleCellExperiment and anndata.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="applying-image-analysis-techniques">Applying Image Analysis techniques<a class="anchor" aria-label="anchor" href="#applying-image-analysis-techniques"></a>
+<h2 id="embedding-latent-space-into-gray-scale-images">Embedding latent space into gray scale images<a class="anchor" aria-label="anchor" href="#embedding-latent-space-into-gray-scale-images"></a>
 </h2>
-<p>Firth, we can apply image analysis techniques such as histogram
-equalisation, variance regularisation, smoothing and segmentation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Histogram EQ</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/equalizeHistogram.html">equalizeHistogram</a></span><span class="op">(</span><span class="va">vesalius</span>,sleft <span class="op">=</span> <span class="fl">2.5</span>, sright<span class="op">=</span><span class="fl">2.5</span>,invert <span class="op">=</span><span class="cn">T</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum</span></span>
-<span><span class="co">## coordinate values</span></span>
+<div class="section level3">
+<h3 id="embed-latent-space">Embed Latent Space<a class="anchor" aria-label="anchor" href="#embed-latent-space"></a>
+</h3>
+<p>We can use this object top embed our latent space into grey scale
+images.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_embeddings.html">generate_embeddings</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  dim_reduction <span class="op">=</span> <span class="st">"PCA"</span>,</span>
+<span>  normalisation <span class="op">=</span> <span class="st">"log_norm"</span>,</span>
+<span>  nfeatures <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Setting number of features low for low run time</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="what-do-we-have-2">What do we have?<a class="anchor" aria-label="anchor" href="#what-do-we-have-2"></a>
+</h4>
+<p>We see that we have added a set of embedding with one used one
+default embedding called the “active” embedding. See section below on
+<em>understanding active embeddings</em>.</p>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## spatial_omics as vesalius assay containing:</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 3 modifications applied to base object. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1047 spatial indices used to form pixel tiles. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 15932 observations in the log_norm count matrix. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## PCA as embeddings. </span></span>
+<span><span class="co">## with PCA as active embedding. </span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="testing-multiple-embeddings">Testing multiple embeddings<a class="anchor" aria-label="anchor" href="#testing-multiple-embeddings"></a>
+</h3>
+<p>We can test out multiple embeddings and every trial will be stored
+into the <code>vesalius_assay</code> object.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_embeddings.html">generate_embeddings</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  dim_reduction <span class="op">=</span> <span class="st">"UMAP"</span>,</span>
+<span>  nfeatures <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Setting number of features low for low run time</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum</span></span>
-<span><span class="co">## coordinate values</span></span></code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Variance regularisation</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regulariseImage.html">regulariseImage</a></span><span class="op">(</span><span class="va">vesalius</span>, lambda <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                            niter <span class="op">=</span> <span class="fl">200</span>, normalise<span class="op">=</span><span class="cn">T</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum</span></span>
-<span><span class="co">## coordinate values</span></span></code></pre>
+<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_embeddings.html">generate_embeddings</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  dim_reduction <span class="op">=</span> <span class="st">"PCA"</span>,</span>
+<span>  nfeatures <span class="op">=</span> <span class="fl">200</span>, <span class="co"># Setting number of features low for low run time</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_embeddings.html">generate_embeddings</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  dim_reduction <span class="op">=</span> <span class="st">"PCA"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>Every time you run a new dimensionality reduction approach it will be
+appended to the previous ones. Vesalius does the same thing for
+different normalisation approaches. This lets you decided which
+combination you would want to use in later stages.</p>
+<p>Note that since you might be want to use the same embedding more than
+once, you will end up with more than one embedding called “PCA” for
+example. In this case, each embedding or normalisation will have a
+unique name.</p>
+<p>For every subsequent embedding called PCA, the trial name will be
+PCA.1, PCA.2 etc The same applies to any embedding or normalisation
+method you select.</p>
+<div class="section level4">
+<h4 id="what-do-we-have-3">What do we have ?<a class="anchor" aria-label="anchor" href="#what-do-we-have-3"></a>
+</h4>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Smoothing</span></span>
-<span><span class="co"># !!!Optional!!! -</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoothArray.html">smoothArray</a></span><span class="op">(</span><span class="va">vesalius</span>,method <span class="op">=</span> <span class="st">"box"</span>, box <span class="op">=</span> <span class="fl">1</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in as.cimg.data.frame(select(image, c("x", "y", "cc", "value"))):</span></span>
-<span><span class="co">## Guessing image dimensions from maximum coordinate values</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">vesalius</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## spatial_omics as vesalius assay containing:</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 6 modifications applied to base object. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1047 spatial indices used to form pixel tiles. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 15932 observations in the log_norm.3 count matrix. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 4 total embedding trials</span></span>
+<span><span class="co">## with PCA.2 as active embedding. </span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+<p>You can also add your own embeddings and they will be appended into
+vesalius in a similar manner. For more information, please refere to the
+<a href="">modifying vesalius objects</a> vignette. Alternively, you can
+also check the manual page for <a href="">add_embeddings</a></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="visualising-grey-scale-images">Visualising Grey scale images<a class="anchor" aria-label="anchor" href="#visualising-grey-scale-images"></a>
+</h3>
+<p>To visualise embeddings, we can simply plot the vesalius object and
+specify which dimension we wish to view. See (imagePlot)[link to page]
+for more information. Since we are leaving the embedding argument as the
+default “last” value, we can only look at the 3 UMAP dimensions. We can
+look at them simulaneously by creating RGB images with one dimension per
+color channel.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Segmentation</span></span>
-<span><span class="co"># This function provides smoothing internally.</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/iterativeSegmentation.array.html">iterativeSegmentation.array</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
-<span>                                        colDepth <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>                                        smoothIter <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                                        method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>,<span class="st">"median"</span><span class="op">)</span>,</span>
-<span>                                        sigma<span class="op">=</span><span class="fl">1.5</span>,</span>
-<span>                                        box <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                                        useCenter <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                                        invert <span class="op">=</span><span class="cn">T</span>,</span>
-<span>                                        verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in as.cimg.data.frame(select(image, c("x", "y", "cc", "value"))):</span></span>
-<span><span class="co">## Guessing image dimensions from maximum coordinate values</span></span>
-<span></span>
-<span><span class="co">## Warning in as.cimg.data.frame(select(image, c("x", "y", "cc", "value"))):</span></span>
-<span><span class="co">## Guessing image dimensions from maximum coordinate values</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in as.cimg.data.frame(imgCopy): Guessing image dimensions from maximum</span></span>
-<span><span class="co">## coordinate values</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/image_plot.html">image_plot</a></span><span class="op">(</span><span class="va">vesalius</span>, dimensions <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Grey PCA dim 1"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/image_plot.html">image_plot</a></span><span class="op">(</span><span class="va">vesalius</span>, dimensions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"RGB PCA"</span><span class="op">)</span></span></code></pre></div>
+<p>If we wanted to look at “UMAP” instead, we can simply specify the
+embedding. Since we used 30 dimensions for UMAP, we can use any
+dimensions to build RGB images.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/image_plot.html">image_plot</a></span><span class="op">(</span><span class="va">vesalius</span>, dimensions <span class="op">=</span> <span class="fl">1</span>, embedding <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Grey UMAP dim 1"</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/image_plot.html">image_plot</a></span><span class="op">(</span><span class="va">vesalius</span>, dimensions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, embedding <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Grey UMAP dim 1, 2, and 3"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span></span></code></pre></div>
+<p><img src="vesalius_files/figure-html/out_plot_grey-1.png" width="960"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="understanding-active-embeddings">Understanding Active Embeddings<a class="anchor" aria-label="anchor" href="#understanding-active-embeddings"></a>
+</h2>
+<p>The active embedding slot in a <code>vesalius_assay</code> object
+contains the embedding values that will be used during image processing
+and image segmentation.</p>
+<p>In the examples above, we tested multiple embeddings.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Isolating territories from colour segments</span></span>
-<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/isolateTerritories.array.html">isolateTerritories.array</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
-<span>                                     captureRadius <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>                                     minBar <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                                     verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_active_embedding_tag.html">get_active_embedding_tag</a></span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "PCA.2"</span></span></code></pre>
+<p>We see that “UMAP.1” is used as the active embedding. Any time the
+embeddings are being used in subsequent functions they will be taken
+from here as this is the “last” embedding used.</p>
+<p>In fact, in any subsequent function that contains the keyword “last”
+for one of its arguments, vesalius will use the last target created.
+This can mean the last embedding used, the last count matrix or the last
+segmentation / territory isolation / territory morphology used.</p>
+<p>If you are unstaified with the results, you can always call the
+embedding or trial you want to use explictely and the active slot will
+be replace with a fresh version of your embeddings of choice. No need to
+re-run everything from scratch!</p>
+<p>While this flexibility can be a boon, it can also be a curse! Anytime
+you explictely request an embedding or a trial it will use that fresh
+instance. This means that every time the active slot will be updated and
+any processing you may have done to it will be overwritten.</p>
 </div>
 <div class="section level2">
-<h2 id="visualisation">Visualisation<a class="anchor" aria-label="anchor" href="#visualisation"></a>
+<h2 id="image-processing-and-image-segmentation">Image processing and Image segmentation<a class="anchor" aria-label="anchor" href="#image-processing-and-image-segmentation"></a>
 </h2>
-<p>Sixth, we can visualise the territories.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Let's have a look!</span></span>
-<span><span class="va">imgTerritory</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/territoryPlot.html">territoryPlot</a></span><span class="op">(</span><span class="va">vesalius</span>, randomise <span class="op">=</span> <span class="cn">TRUE</span>,cex <span class="op">=</span><span class="fl">15</span> , cex.pt<span class="op">=</span><span class="fl">3.5</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">imgTerritory</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vesalius_files/figure-html/viz-1.png" width="576"></p>
-</div>
-<div class="section level2">
-<h2 id="territory-extraction-and-markers">Territory extraction and markers<a class="anchor" aria-label="anchor" href="#territory-extraction-and-markers"></a>
-</h2>
-<p>Finally, we can extract territories to run a more in depth analysis.
-This returns a Seurat object with all selected territories. We can also
-find differential gene expression between territories.</p>
+<div class="section level3">
+<h3 id="image-processing">Image Processing<a class="anchor" aria-label="anchor" href="#image-processing"></a>
+</h3>
+<p>Once we have these images, we can apply image processing techniques
+to each gray scale image.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># extract terriotry from seurat object</span></span>
-<span><span class="va">ter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractTerritories.html">extractTerritories</a></span><span class="op">(</span><span class="va">vesalius</span>,<span class="va">counts</span>,seedID<span class="op">=</span> <span class="fl">1</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in as.cimg.data.frame(.): Guessing image dimensions from maximum</span></span>
-<span><span class="co">## coordinate values</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regularise_image.html">regularise_image</a></span><span class="op">(</span><span class="va">vesalius</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## 2023-08-24 17:12:05.888884  Converting Vesalius to Image</span></span>
+<span><span class="co">## 2023-08-24 17:12:06.541118  Regularising Image </span></span>
+<span><span class="co">## 2023-08-24 17:12:10.414813  Converting Images to Vesalius</span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># get all markers related to all territories</span></span>
-<span><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractAllMarkers.html">extractAllMarkers</a></span><span class="op">(</span><span class="va">vesalius</span>,<span class="va">counts</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smooth_image.html">smooth_image</a></span><span class="op">(</span><span class="va">vesalius</span>, sigma <span class="op">=</span> <span class="fl">5</span>, iter <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## 2023-08-24 17:12:10.765511  Converting Vesalius to Image</span></span>
+<span><span class="co">## 2023-08-24 17:12:11.480793  Smoothing Image Arrays </span></span>
+<span><span class="co">## 2023-08-24 17:12:11.876478  Converting Images to Vesalius</span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/equalize_image.html">equalize_image</a></span><span class="op">(</span><span class="va">vesalius</span>, sleft <span class="op">=</span> <span class="fl">5</span>, sright <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## 2023-08-24 17:12:12.181685  Converting Vesalius to Image</span></span>
+<span><span class="co">## 2023-08-24 17:12:12.910641  Equalizing Histogram </span></span>
+<span><span class="co">## 2023-08-24 17:12:13.02603  Converting Images to Vesalius</span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+<p>You can apply any image processing method you wish and in any order
+you desire. Please note that the default number of dimensions for these
+function is defined by <code>seq(1,3)</code> giving the first three
+dimensions. If working with PCA, please set this argument according to
+how many dimensions you wish to process.</p>
+<p>This also alows for the selction of abitrary of PCs. For example,
+based on the grey scale images, you might decided that this would be a
+better choice of PCs</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Selecting a subset of PCs</span></span>
+<span><span class="va">dims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span></span>
 <span></span>
-<span></span>
-<span><span class="co"># get markers associated with on or more territories</span></span>
-<span><span class="va">one</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractMarkers.html">extractMarkers</a></span><span class="op">(</span><span class="va">vesalius</span>, <span class="va">counts</span>, seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># comparing territories</span></span>
-<span><span class="va">two</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extractMarkers.html">extractMarkers</a></span><span class="op">(</span><span class="va">vesalius</span>, <span class="va">counts</span>, seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,verbose <span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># running smoothing o</span></span>
+<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regularise_image.html">regularise_image</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  dimensions <span class="op">=</span> <span class="va">dims</span>,</span>
+<span>  embedding <span class="op">=</span> <span class="st">"PCA"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/equalize_image.html">equalize_image</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  dimensions <span class="op">=</span> <span class="va">dims</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smooth_image.html">smooth_image</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  dimensions <span class="op">=</span> <span class="va">dims</span>,</span>
+<span>  iter <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  sigma <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>In this example, we explicetely requested the <em>PCA</em> embedding.
+This means that we will take a fresh instance of the <em>PCA</em>
+embedding and use this as our active embedding. Once specified, all
+subsequent functions will use this new active embedding unless specified
+otherwise.</p>
+<p>However, note that dimensions are being parsed at every step. Only
+the images coressponding to these dimensions will be processed. Vesalius
+still retains the other ones just in case.</p>
+</div>
+<div class="section level3">
+<h3 id="image-segmentation">Image segmentation<a class="anchor" aria-label="anchor" href="#image-segmentation"></a>
+</h3>
+<p>Vesalius will attempts to segment the images into color segments.
+Vesalius use a kmeans clustering approach to segment grey scale images.
+Note that the segmentation here is applied to the whole stack and not
+individually.</p>
+<p>The goal is top obtain colour segments that we can subdivived into
+territories.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/segment_image.html">segment_image</a></span><span class="op">(</span><span class="va">vesalius</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"kmeans"</span>,</span>
+<span>  col_resolution <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="what-do-we-have-4">What do we have?<a class="anchor" aria-label="anchor" href="#what-do-we-have-4"></a>
+</h3>
+<p>We can see that the vesalius_assay object now contains some more
+information related to the segmentation.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## spatial_omics as vesalius assay containing:</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 10 modifications applied to base object. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1047 spatial indices used to form pixel tiles. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 15932 observations in the log_norm.3 count matrix. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 4 total embedding trials</span></span>
+<span><span class="co">## with PCA.2 as active embedding. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1 Segmentation trials. </span></span>
+<span><span class="co">## 0 Territory trials. </span></span>
+<span><span class="co">## 0 Morphing trials. </span></span>
+<span><span class="co">## 0 Layering trials. </span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+<p>We can also have a look at the results of the image segmentation.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/image_plot.html">image_plot</a></span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Segments only"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p5</span><span class="op">)</span></span></code></pre></div>
+<p><img src="vesalius_files/figure-html/plot_segments_only-1.png" width="960"></p>
+<p>Kmeans is the default setting for image segmentation but Vesalius
+also provides <em>louvain</em> and <em>leiden</em> based approaches.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="isolating-territories">Isolating territories<a class="anchor" aria-label="anchor" href="#isolating-territories"></a>
+</h2>
+<div class="section level3">
+<h3 id="isolating-territories-from-colour-segments">Isolating territories from colour segments<a class="anchor" aria-label="anchor" href="#isolating-territories-from-colour-segments"></a>
+</h3>
+<p>The final step is to isolate color segments into seperate
+territories. Similar color segments may be of the same colour but are
+seperated in 2D space. We want to be able to isolate each patch. For
+this, we can use the <code>isolate_territories</code> function.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/isolate_territories.html">isolate_territories</a></span><span class="op">(</span><span class="va">vesalius</span>, capture_radius <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## 2023-08-24 17:12:16.816142  Pooling Segment  1 </span></span>
+<span><span class="co">## 2023-08-24 17:12:16.829194  Pooling Segment  2 </span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+<div class="section level4">
+<h4 id="what-do-we-have-5">What do we have?<a class="anchor" aria-label="anchor" href="#what-do-we-have-5"></a>
+</h4>
+<p>Now we can have a look at the isolated territories. We can keep track
+of how many instances of image segmentation and image manipulation we
+have gone through.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## spatial_omics as vesalius assay containing:</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 11 modifications applied to base object. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1047 spatial indices used to form pixel tiles. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 15932 observations in the log_norm.3 count matrix. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 4 total embedding trials</span></span>
+<span><span class="co">## with PCA.2 as active embedding. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1 Segmentation trials. </span></span>
+<span><span class="co">## 1 Territory trials. </span></span>
+<span><span class="co">## 0 Morphing trials. </span></span>
+<span><span class="co">## 0 Layering trials. </span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="visualizing-territories">Visualizing Territories<a class="anchor" aria-label="anchor" href="#visualizing-territories"></a>
+</h3>
+<p>We can plot our territories using vesalius plotting functions. Note
+that this is a <code>ggplot</code> object as such it is customisable
+using <code>ggplot2</code> functionalities.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/territory_plot.html">territory_plot</a></span><span class="op">(</span><span class="va">vesalius</span>, cex_pt <span class="op">=</span> <span class="fl">3.5</span><span class="op">)</span></span>
+<span><span class="va">p6</span></span></code></pre></div>
+<p><img src="vesalius_files/figure-html/plot_territories-1.png" width="960"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="comparing-territories">Comparing territories<a class="anchor" aria-label="anchor" href="#comparing-territories"></a>
+</h2>
+<p>Once we have our territories, we can compare the expression of genes
+between territories.</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/identify_markers.html">identify_markers</a></span><span class="op">(</span><span class="va">vesalius</span>, seed <span class="op">=</span> <span class="fl">1</span>, query <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
+<span><span class="co">## 2023-08-24 17:12:17.97826 ===&gt; Computing DEGs in spatial_omics &lt;===</span></span>
+<span><span class="co">## 2023-08-24 17:12:18.846469 ===&gt; 1 VS 2 &lt;=== </span></span>
+<span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">deg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_markers.html">get_markers</a></span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span></code></pre></div>
+<p>And finally we can visualise the expression of our genes of interest.
+You can parse more than one gene. Here we show the overall expression
+profile of <strong>Malat1</strong> but also its mean expression in each
+territory.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/view_gene_expression.html">view_gene_expression</a></span><span class="op">(</span><span class="va">vesalius</span>, genes <span class="op">=</span> <span class="st">"Malat1"</span><span class="op">)</span></span>
+<span><span class="va">p8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/view_gene_expression.html">view_gene_expression</a></span><span class="op">(</span><span class="va">vesalius</span>, genes <span class="op">=</span> <span class="st">"Malat1"</span>, as_layer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">p7</span> <span class="op">+</span> <span class="va">p8</span></span></code></pre></div>
+<p><img src="vesalius_files/figure-html/view_DEG-1.png" width="960"></p>
+</div>
+<div class="section level2">
+<h2 id="see-also">See Also<a class="anchor" aria-label="anchor" href="#see-also"></a>
+</h2>
+<p>For more information about different aspects of Vesalius:</p>
+<ul>
+<li><a href="">Modifying objects</a></li>
+<li><a href="">Understanding vesalius_assay object</a></li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.3.1 (2023-06-16)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
-<span><span class="co">## Running under: Ubuntu 22.04.2 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -298,53 +584,98 @@ find differential gene expression between territories.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] vesalius_1.0.1     ggplot2_3.4.2      tidyr_1.3.0        dplyr_1.1.2       </span></span>
-<span><span class="co">## [5] imager_0.45.2      magrittr_2.0.3     SeuratObject_4.1.3 Seurat_4.3.0.1    </span></span>
+<span><span class="co">## [1] ggplot2_3.4.3       patchwork_1.1.3     vesalius_2.0.0     </span></span>
+<span><span class="co">## [4] Biobase_2.60.0      BiocGenerics_0.46.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] RColorBrewer_1.1-3     jsonlite_1.8.7         spatstat.utils_3.0-3  </span></span>
-<span><span class="co">##   [4] farver_2.1.1           rmarkdown_2.23         fs_1.6.3              </span></span>
-<span><span class="co">##   [7] ragg_1.2.5             vctrs_0.6.3            ROCR_1.0-11           </span></span>
-<span><span class="co">##  [10] memoise_2.0.1          spatstat.explore_3.2-1 bmp_0.3               </span></span>
-<span><span class="co">##  [13] htmltools_0.5.5        readbitmap_0.1.5       sass_0.4.7            </span></span>
-<span><span class="co">##  [16] sctransform_0.3.5      parallelly_1.36.0      KernSmooth_2.23-21    </span></span>
-<span><span class="co">##  [19] bslib_0.5.0            htmlwidgets_1.6.2      desc_1.4.2            </span></span>
-<span><span class="co">##  [22] ica_1.0-3              plyr_1.8.8             plotly_4.10.2         </span></span>
-<span><span class="co">##  [25] zoo_1.8-12             cachem_1.0.8           igraph_1.5.0.1        </span></span>
-<span><span class="co">##  [28] mime_0.12              lifecycle_1.0.3        pkgconfig_2.0.3       </span></span>
-<span><span class="co">##  [31] Matrix_1.5-4.1         R6_2.5.1               fastmap_1.1.1         </span></span>
-<span><span class="co">##  [34] rbibutils_2.2.13       fitdistrplus_1.1-11    future_1.33.0         </span></span>
-<span><span class="co">##  [37] shiny_1.7.4.1          digest_0.6.33          colorspace_2.1-0      </span></span>
-<span><span class="co">##  [40] patchwork_1.1.2        rprojroot_2.0.3        tensor_1.5            </span></span>
-<span><span class="co">##  [43] irlba_2.3.5.1          textshaping_0.3.6      labeling_0.4.2        </span></span>
-<span><span class="co">##  [46] progressr_0.13.0       fansi_1.0.4            spatstat.sparse_3.0-2 </span></span>
-<span><span class="co">##  [49] httr_1.4.6             polyclip_1.10-4        abind_1.4-5           </span></span>
-<span><span class="co">##  [52] compiler_4.3.1         tvR_0.3.2              withr_2.5.0           </span></span>
-<span><span class="co">##  [55] tiff_0.1-11            highr_0.10             MASS_7.3-60           </span></span>
-<span><span class="co">##  [58] concaveman_1.1.0       tools_4.3.1            lmtest_0.9-40         </span></span>
-<span><span class="co">##  [61] httpuv_1.6.11          future.apply_1.11.0    goftest_1.2-3         </span></span>
-<span><span class="co">##  [64] glue_1.6.2             nlme_3.1-162           promises_1.2.0.1      </span></span>
-<span><span class="co">##  [67] grid_4.3.1             Rtsne_0.16             cluster_2.1.4         </span></span>
-<span><span class="co">##  [70] reshape2_1.4.4         generics_0.1.3         gtable_0.3.3          </span></span>
-<span><span class="co">##  [73] spatstat.data_3.0-1    data.table_1.14.8      sp_2.0-0              </span></span>
-<span><span class="co">##  [76] utf8_1.2.3             spatstat.geom_3.2-4    RcppAnnoy_0.0.21      </span></span>
-<span><span class="co">##  [79] ggrepel_0.9.3          RANN_2.6.1             pillar_1.9.0          </span></span>
-<span><span class="co">##  [82] stringr_1.5.0          later_1.3.1            splines_4.3.1         </span></span>
-<span><span class="co">##  [85] lattice_0.21-8         survival_3.5-5         deldir_1.0-9          </span></span>
-<span><span class="co">##  [88] tidyselect_1.2.0       miniUI_0.1.1.1         pbapply_1.7-2         </span></span>
-<span><span class="co">##  [91] knitr_1.43             imagerExtra_1.3.2      gridExtra_2.3         </span></span>
-<span><span class="co">##  [94] scattermore_1.2        xfun_0.39              matrixStats_1.0.0     </span></span>
-<span><span class="co">##  [97] fftwtools_0.9-11       stringi_1.7.12         lazyeval_0.2.2        </span></span>
-<span><span class="co">## [100] yaml_2.3.7             evaluate_0.21          codetools_0.2-19      </span></span>
-<span><span class="co">## [103] tibble_3.2.1           cli_3.6.1              uwot_0.1.16           </span></span>
-<span><span class="co">## [106] Rdpack_2.4             xtable_1.8-4           reticulate_1.30       </span></span>
-<span><span class="co">## [109] systemfonts_1.0.4      munsell_0.5.0          jquerylib_0.1.4       </span></span>
-<span><span class="co">## [112] Rcpp_1.0.11            globals_0.16.2         spatstat.random_3.1-5 </span></span>
-<span><span class="co">## [115] png_0.1-8              parallel_4.3.1         ellipsis_0.3.2        </span></span>
-<span><span class="co">## [118] pkgdown_2.0.7          jpeg_0.1-10            listenv_0.9.0         </span></span>
-<span><span class="co">## [121] viridisLite_0.4.2      scales_1.2.1           ggridges_0.5.4        </span></span>
-<span><span class="co">## [124] leiden_0.4.3           purrr_1.0.1            rlang_1.1.1           </span></span>
-<span><span class="co">## [127] cowplot_1.1.1</span></span></code></pre>
+<span><span class="co">##   [1] RcppAnnoy_0.0.21            splines_4.3.1              </span></span>
+<span><span class="co">##   [3] later_1.3.1                 bitops_1.0-7               </span></span>
+<span><span class="co">##   [5] tibble_3.2.1                polyclip_1.10-4            </span></span>
+<span><span class="co">##   [7] lifecycle_1.0.3             Rdpack_2.5                 </span></span>
+<span><span class="co">##   [9] rstatix_0.7.2               edgeR_3.42.4               </span></span>
+<span><span class="co">##  [11] doParallel_1.0.17           rprojroot_2.0.3            </span></span>
+<span><span class="co">##  [13] globals_0.16.2              lattice_0.21-8             </span></span>
+<span><span class="co">##  [15] MASS_7.3-60                 readbitmap_0.1.5           </span></span>
+<span><span class="co">##  [17] backports_1.4.1             magrittr_2.0.3             </span></span>
+<span><span class="co">##  [19] limma_3.56.2                plotly_4.10.2              </span></span>
+<span><span class="co">##  [21] sass_0.4.7                  rmarkdown_2.24             </span></span>
+<span><span class="co">##  [23] jquerylib_0.1.4             yaml_2.3.7                 </span></span>
+<span><span class="co">##  [25] httpuv_1.6.11               Seurat_4.3.0.1             </span></span>
+<span><span class="co">##  [27] NMF_0.26                    sctransform_0.3.5          </span></span>
+<span><span class="co">##  [29] sp_2.0-0                    spatstat.sparse_3.0-2      </span></span>
+<span><span class="co">##  [31] reticulate_1.31             cowplot_1.1.1              </span></span>
+<span><span class="co">##  [33] pbapply_1.7-2               RColorBrewer_1.1-3         </span></span>
+<span><span class="co">##  [35] abind_1.4-5                 zlibbioc_1.46.0            </span></span>
+<span><span class="co">##  [37] Rtsne_0.16                  GenomicRanges_1.52.0       </span></span>
+<span><span class="co">##  [39] purrr_1.0.2                 imagerExtra_1.3.2          </span></span>
+<span><span class="co">##  [41] RCurl_1.98-1.12             GenomeInfoDbData_1.2.10    </span></span>
+<span><span class="co">##  [43] IRanges_2.34.1              S4Vectors_0.38.1           </span></span>
+<span><span class="co">##  [45] ggrepel_0.9.3               irlba_2.3.5.1              </span></span>
+<span><span class="co">##  [47] kohonen_3.0.12              listenv_0.9.0              </span></span>
+<span><span class="co">##  [49] spatstat.utils_3.0-3        goftest_1.2-3              </span></span>
+<span><span class="co">##  [51] spatstat.random_3.1-5       fitdistrplus_1.1-11        </span></span>
+<span><span class="co">##  [53] parallelly_1.36.0           pkgdown_2.0.7              </span></span>
+<span><span class="co">##  [55] leiden_0.4.3                codetools_0.2-19           </span></span>
+<span><span class="co">##  [57] DelayedArray_0.26.7         RcppRoll_0.3.0             </span></span>
+<span><span class="co">##  [59] tidyselect_1.2.0            farver_2.1.1               </span></span>
+<span><span class="co">##  [61] imager_0.45.2               matrixStats_1.0.0          </span></span>
+<span><span class="co">##  [63] stats4_4.3.1                spatstat.explore_3.2-1     </span></span>
+<span><span class="co">##  [65] jsonlite_1.8.7              bmp_0.3                    </span></span>
+<span><span class="co">##  [67] ellipsis_0.3.2              progressr_0.14.0           </span></span>
+<span><span class="co">##  [69] ggridges_0.5.4              survival_3.5-5             </span></span>
+<span><span class="co">##  [71] iterators_1.0.14            systemfonts_1.0.4          </span></span>
+<span><span class="co">##  [73] foreach_1.5.2               tools_4.3.1                </span></span>
+<span><span class="co">##  [75] ggnewscale_0.4.9            ragg_1.2.5                 </span></span>
+<span><span class="co">##  [77] ica_1.0-3                   Rcpp_1.0.11                </span></span>
+<span><span class="co">##  [79] glue_1.6.2                  gridExtra_2.3              </span></span>
+<span><span class="co">##  [81] xfun_0.40                   DESeq2_1.40.2              </span></span>
+<span><span class="co">##  [83] MatrixGenerics_1.12.3       GenomeInfoDb_1.36.1        </span></span>
+<span><span class="co">##  [85] dplyr_1.1.2                 withr_2.5.0                </span></span>
+<span><span class="co">##  [87] BiocManager_1.30.22         fastmap_1.1.1              </span></span>
+<span><span class="co">##  [89] fansi_1.0.4                 digest_0.6.33              </span></span>
+<span><span class="co">##  [91] R6_2.5.1                    mime_0.12                  </span></span>
+<span><span class="co">##  [93] textshaping_0.3.6           colorspace_2.1-0           </span></span>
+<span><span class="co">##  [95] scattermore_1.2             tensor_1.5                 </span></span>
+<span><span class="co">##  [97] jpeg_0.1-10                 spatstat.data_3.0-1        </span></span>
+<span><span class="co">##  [99] utf8_1.2.3                  tidyr_1.3.0                </span></span>
+<span><span class="co">## [101] generics_0.1.3              data.table_1.14.8          </span></span>
+<span><span class="co">## [103] httr_1.4.7                  htmlwidgets_1.6.2          </span></span>
+<span><span class="co">## [105] S4Arrays_1.0.5              uwot_0.1.16                </span></span>
+<span><span class="co">## [107] pkgconfig_2.0.3             gtable_0.3.4               </span></span>
+<span><span class="co">## [109] registry_0.5-1              lmtest_0.9-40              </span></span>
+<span><span class="co">## [111] XVector_0.40.0              htmltools_0.5.6            </span></span>
+<span><span class="co">## [113] carData_3.0-5               pwr_1.3-0                  </span></span>
+<span><span class="co">## [115] fftwtools_0.9-11            SeuratObject_4.1.3         </span></span>
+<span><span class="co">## [117] scales_1.2.1                png_0.1-8                  </span></span>
+<span><span class="co">## [119] tvR_0.3.2                   knitr_1.43                 </span></span>
+<span><span class="co">## [121] Signac_1.10.0               reshape2_1.4.4             </span></span>
+<span><span class="co">## [123] nlme_3.1-162                cachem_1.0.8               </span></span>
+<span><span class="co">## [125] zoo_1.8-12                  stringr_1.5.0              </span></span>
+<span><span class="co">## [127] KernSmooth_2.23-21          parallel_4.3.1             </span></span>
+<span><span class="co">## [129] miniUI_0.1.1.1              desc_1.4.2                 </span></span>
+<span><span class="co">## [131] infix_0.1.0                 pillar_1.9.0               </span></span>
+<span><span class="co">## [133] grid_4.3.1                  vctrs_0.6.3                </span></span>
+<span><span class="co">## [135] RANN_2.6.1                  promises_1.2.1             </span></span>
+<span><span class="co">## [137] ggpubr_0.6.0                car_3.1-2                  </span></span>
+<span><span class="co">## [139] xtable_1.8-4                cluster_2.1.4              </span></span>
+<span><span class="co">## [141] evaluate_0.21               cli_3.6.1                  </span></span>
+<span><span class="co">## [143] locfit_1.5-9.8              compiler_4.3.1             </span></span>
+<span><span class="co">## [145] Rsamtools_2.16.0            rlang_1.1.1                </span></span>
+<span><span class="co">## [147] crayon_1.5.2                rngtools_1.5.2             </span></span>
+<span><span class="co">## [149] ggsignif_0.6.4              future.apply_1.11.0        </span></span>
+<span><span class="co">## [151] labeling_0.4.2              plyr_1.8.8                 </span></span>
+<span><span class="co">## [153] fs_1.6.3                    stringi_1.7.12             </span></span>
+<span><span class="co">## [155] viridisLite_0.4.2           deldir_1.0-9               </span></span>
+<span><span class="co">## [157] gridBase_0.4-7              BiocParallel_1.34.2        </span></span>
+<span><span class="co">## [159] munsell_0.5.0               Biostrings_2.68.1          </span></span>
+<span><span class="co">## [161] tiff_0.1-11                 lazyeval_0.2.2             </span></span>
+<span><span class="co">## [163] spatstat.geom_3.2-4         Matrix_1.6-1               </span></span>
+<span><span class="co">## [165] future_1.33.0               shiny_1.7.5                </span></span>
+<span><span class="co">## [167] highr_0.10                  SummarizedExperiment_1.30.2</span></span>
+<span><span class="co">## [169] rbibutils_2.2.15            ROCR_1.0-11                </span></span>
+<span><span class="co">## [171] broom_1.0.5                 igraph_1.5.1               </span></span>
+<span><span class="co">## [173] memoise_2.0.1               bslib_0.5.1                </span></span>
+<span><span class="co">## [175] fastmatch_1.1-4</span></span></code></pre>
 </div>
   </div>
 

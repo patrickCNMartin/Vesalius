@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">vesalius</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -35,7 +35,13 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="articles/Vesalius_Analysis/Vesalius_analysis.html">Vesalius Manuscript Analysis</a>
+      <a href="articles/Vesalius_Analysis/Spatial_DNA_seq.html">Vesalius: Spatial Genomics</a>
+    </li>
+    <li>
+      <a href="articles/Vesalius_Analysis/Spatial_Transcriptomics.html">Vesalius: Spatial Transcriptomics</a>
+    </li>
+    <li>
+      <a href="articles/Vesalius_Analysis/Vesalius_MSB_analysis.html">Vesalius: MSB Manuscript Analysis</a>
     </li>
   </ul></li>
 <li>
@@ -69,22 +75,25 @@
     <div class="section level2 citation-section">
     <div>
       <h1 id="citation">Citation</h1>
-      <small class="dont-index">Source: <a href="https://github.com/patrickCNMartin/Vesalius/blob/main/DESCRIPTION" class="external-link"><code>DESCRIPTION</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/patrickCNMartin/Vesalius/blob/main/inst/CITATION" class="external-link"><code>inst/CITATION</code></a></small>
     </div>
     </div>
 
 
-    <p>Martin PC (2023).
-<em>vesalius: Vesalius: Dissecting Tissue Anatomy from Spatial Transcriptomic Data</em>.
-https://patrickcnmartin.github.io/Vesalius/,
-https://github.com/patrickCNMartin/Vesalius. 
-</p>
-    <pre>@Manual{,
-  title = {vesalius: Vesalius: Dissecting Tissue Anatomy from Spatial Transcriptomic Data},
-  author = {Patrick C.N. Martin},
-  year = {2023},
-  note = {https://patrickcnmartin.github.io/Vesalius/,
-https://github.com/patrickCNMartin/Vesalius},
+    <p>Martin et al. Vesalius: high-resolution in silico anatomization of spatial transcriptomic data using image analysis. Molecular Systems Biology (2022) [Vesalius 1.0.0]</p>
+    <pre>@Article{,
+  author = {Patrick C N Martin and Hyobin Kim and Cecilia Lövkvist and Byung-Woo Hong and Kyoung Jae Won},
+  title = {Vesalius: high-resolution in silico anatomization of spatial transcriptomic data using image analysis},
+  journal = {Molecular Systems Biology},
+  volume = {18},
+  number = {9},
+  pages = {e11080},
+  keywords = {anatomical territories, spatial domains, spatial transcriptomics, tissue architecture, tissue heterogeneity},
+  doi = {https://doi.org/10.15252/msb.202211080},
+  url = {https://www.embopress.org/doi/abs/10.15252/msb.202211080},
+  eprint = {https://www.embopress.org/doi/pdf/10.15252/msb.202211080},
+  abstract = {Abstract Characterization of tissue architecture promises to deliver insights into development, cell communication, and disease. In silico spatial domain retrieval methods have been developed for spatial transcriptomics (ST) data assuming transcriptional similarity of neighboring barcodes. However, domain retrieval approaches with this assumption cannot work in complex tissues composed of multiple cell types. This task becomes especially challenging in cellular resolution ST methods. We developed Vesalius to decipher tissue anatomy from ST data by applying image processing technology. Vesalius uniquely detected territories composed of multiple cell types and successfully recovered tissue structures in high-resolution ST data including in mouse brain, embryo, liver, and colon. Utilizing this tissue architecture, Vesalius identified tissue morphology-specific gene expression and regional specific gene expression changes for astrocytes, interneuron, oligodendrocytes, and entorhinal cells in the mouse brain.},
+  year = {2022},
 }</pre>
 
   </div>

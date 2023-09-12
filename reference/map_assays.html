@@ -75,14 +75,19 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">map_assays</span><span class="op">(</span></span>
 <span>  <span class="va">seed_assay</span>,</span>
 <span>  <span class="va">query_assay</span>,</span>
+<span>  neighborhood <span class="op">=</span> <span class="st">"knn"</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  radius <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  depth <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  dimensions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span><span class="op">)</span>,</span>
+<span>  norm <span class="op">=</span> <span class="st">"noise"</span>,</span>
 <span>  mapping <span class="op">=</span> <span class="st">"div"</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  signal <span class="op">=</span> <span class="st">"variable_features"</span>,</span>
 <span>  use_norm <span class="op">=</span> <span class="st">"raw"</span>,</span>
 <span>  custom_cost <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  merge <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -97,9 +102,24 @@
 <dd><p>vesalius_assay objecy - data to map</p></dd>
 
 
+<dt>neighborhood</dt>
+<dd><p>character - how should the neighborhood be selected?
+"knn", "radius", "depth" (See details)</p></dd>
+
+
 <dt>k</dt>
 <dd><p>int ]2, n_points] number of neareset neighbors to be considered for
 neighborhodd computation.</p></dd>
+
+
+<dt>radius</dt>
+<dd><p>numeric ]0,1[ proportion of max distance between points 
+to consider for the neighborhood</p></dd>
+
+
+<dt>depth</dt>
+<dd><p>int [1, NA] graph depth from cell to consider from neighborhood
+(See details)</p></dd>
 
 
 <dt>dimensions</dt>
@@ -163,7 +183,14 @@ a custom gene vector, containing only the gene set you are interested in.</p>
 distance (using the signal) betwwen each point in the seed and query. It
 also includes the distance in signal between each points neighborhoods.
 The neighborhood singal is computed by averaging the signal across k
-nearest neighbors in space. This cost matrix is then parsed to a
+nearest neighbors in space if using Knn. If using radius, the neighborhood
+will be computed using all cells within a definined radius. 
+If using depth, coordinates will be used to create a voronoi graph. 
+The neighborhood will be composed of all cells with "depth" steps i.e.
+how many nodes in the graph do you need to go through to get to taget cell?
+A depth of one will contain all cells in direct contact with center cell.</p>
+
+<p>This cost matrix is then parsed to a
 Kuhn–Munkres algorithm that will generate point pairs that minimize
 the overall cost.</p>
 <p>Since the algorithm complexity is O(n3), it can be time consuming to

@@ -154,16 +154,10 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/commit_log.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/compute_cell_cost.html</loc>
-  </url>
-  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/compute_effect_size.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/compute_nearest_neighbor_graph.html</loc>
-  </url>
-  <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/compute_neighbor_cost.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/compute_territory_area.html</loc>
@@ -244,7 +238,7 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/extend_boundary.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/feature_dissim.html</loc>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/feature_dist.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/filter_grid.html</loc>
@@ -370,7 +364,7 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/min_max.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/neighbor_expression.html</loc>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/neighborhood_signal.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/norm_pixel.html</loc>

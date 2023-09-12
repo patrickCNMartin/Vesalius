@@ -73,14 +73,18 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">point_mapping</span><span class="op">(</span></span>
-<span>  <span class="va">seed</span>,</span>
-<span>  <span class="va">seed_signal</span>,</span>
-<span>  <span class="va">query</span>,</span>
 <span>  <span class="va">query_signal</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="st">"div"</span>,</span>
+<span>  <span class="va">query_assay</span>,</span>
+<span>  <span class="va">cost</span>,</span>
+<span>  <span class="va">seed_signal</span>,</span>
+<span>  <span class="va">seed_assay</span>,</span>
+<span>  neighborhood <span class="op">=</span> <span class="st">"knn"</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  radius <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  depth <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  custom_cost <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  norm <span class="op">=</span> <span class="st">"noise"</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="st">"div"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -88,37 +92,33 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>seed</dt>
-<dd><p>vesalius_assay object</p></dd>
+    <dl><dt>query_signal</dt>
+<dd><p>processed query signal from query assay</p></dd>
 
 
 <dt>seed_signal</dt>
 <dd><p>processed seed signal from seed assay</p></dd>
 
 
-<dt>query</dt>
-<dd><p>vesalius_assay object</p></dd>
-
-
-<dt>query_signal</dt>
-<dd><p>processed query signal from query assay</p></dd>
-
-
-<dt>mapping</dt>
-<dd><p>exact mapping or div (divide and conquer)</p></dd>
-
-
 <dt>k</dt>
 <dd><p>int size of niche (knn)</p></dd>
+
+
+<dt>radius</dt>
+<dd><p>0.05 proportion of max distance to use as radius for 
+neighborhood</p></dd>
+
+
+<dt>depth</dt>
+<dd><p>graph path depth to condsider for neighborhood.</p></dd>
 
 
 <dt>batch_size</dt>
 <dd><p>int number of points in each query batch</p></dd>
 
 
-<dt>custom_cost</dt>
-<dd><p>matrix - matrix of size n (query cells) by p (seed cells)
-containing custom cost matrix. Used instead of vesalius cost matrix</p></dd>
+<dt>mapping</dt>
+<dd><p>exact mapping or div (divide and conquer)</p></dd>
 
 
 <dt>overwrite</dt>
@@ -128,6 +128,19 @@ be added to the vesalius matrix or should it overwrite it completely.</p></dd>
 
 <dt>verbose</dt>
 <dd><p>logical - out progress to console</p></dd>
+
+
+<dt>query</dt>
+<dd><p>vesalius_assay object</p></dd>
+
+
+<dt>custom_cost</dt>
+<dd><p>matrix - matrix of size n (query cells) by p (seed cells)
+containing custom cost matrix. Used instead of vesalius cost matrix</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>vesalius_assay object</p></dd>
 
 </dl></div>
     <div id="value">

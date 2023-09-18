@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Patrick C.N.
 Martin</h4>
             
-            <h4 data-toc-skip class="date">2023-09-12</h4>
+            <h4 data-toc-skip class="date">2023-09-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/patrickCNMartin/Vesalius/blob/main/vignettes/vesalius.Rmd" class="external-link"><code>vignettes/vesalius.Rmd</code></a></small>
       <div class="hidden name"><code>vesalius.Rmd</code></div>
@@ -371,23 +371,23 @@ to each gray scale image.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regularise_image.html">regularise_image</a></span><span class="op">(</span><span class="va">vesalius</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
-<span><span class="co">## 2023-09-12 23:52:19.889627  Converting Vesalius to Image</span></span>
-<span><span class="co">## 2023-09-12 23:52:20.462035  Regularising Image </span></span>
-<span><span class="co">## 2023-09-12 23:52:25.194445  Converting Images to Vesalius</span></span>
+<span><span class="co">## 2023-09-18 21:12:38.885268  Converting Vesalius to Image</span></span>
+<span><span class="co">## 2023-09-18 21:12:39.535856  Regularising Image </span></span>
+<span><span class="co">## 2023-09-18 21:12:43.937843  Converting Images to Vesalius</span></span>
 <span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smooth_image.html">smooth_image</a></span><span class="op">(</span><span class="va">vesalius</span>, sigma <span class="op">=</span> <span class="fl">5</span>, iter <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
-<span><span class="co">## 2023-09-12 23:52:25.467738  Converting Vesalius to Image</span></span>
-<span><span class="co">## 2023-09-12 23:52:26.075109  Smoothing Image Arrays </span></span>
-<span><span class="co">## 2023-09-12 23:52:26.456056  Converting Images to Vesalius</span></span>
+<span><span class="co">## 2023-09-18 21:12:44.282669  Converting Vesalius to Image</span></span>
+<span><span class="co">## 2023-09-18 21:12:45.01515  Smoothing Image Arrays </span></span>
+<span><span class="co">## 2023-09-18 21:12:45.436803  Converting Images to Vesalius</span></span>
 <span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/equalize_image.html">equalize_image</a></span><span class="op">(</span><span class="va">vesalius</span>, sleft <span class="op">=</span> <span class="fl">5</span>, sright <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
-<span><span class="co">## 2023-09-12 23:52:26.703333  Converting Vesalius to Image</span></span>
-<span><span class="co">## 2023-09-12 23:52:27.342256  Equalizing Histogram </span></span>
-<span><span class="co">## 2023-09-12 23:52:27.485334  Converting Images to Vesalius</span></span>
+<span><span class="co">## 2023-09-18 21:12:45.741967  Converting Vesalius to Image</span></span>
+<span><span class="co">## 2023-09-18 21:12:46.503588  Equalizing Histogram </span></span>
+<span><span class="co">## 2023-09-18 21:12:46.618413  Converting Images to Vesalius</span></span>
 <span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
 <p>You can apply any image processing method you wish and in any order
 you desire. Please note that the default number of dimensions for these
@@ -484,8 +484,8 @@ this, we can use the <code>isolate_territories</code> function.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/isolate_territories.html">isolate_territories</a></span><span class="op">(</span><span class="va">vesalius</span>, capture_radius <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
-<span><span class="co">## 2023-09-12 23:52:30.784551  Pooling Segment  1 </span></span>
-<span><span class="co">## 2023-09-12 23:52:30.797585  Pooling Segment  2 </span></span>
+<span><span class="co">## 2023-09-18 21:12:50.382465  Pooling Segment  1 </span></span>
+<span><span class="co">## 2023-09-18 21:12:50.396512  Pooling Segment  2 </span></span>
 <span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
 <div class="section level4">
 <h4 id="what-do-we-have-5">What do we have?<a class="anchor" aria-label="anchor" href="#what-do-we-have-5"></a>
@@ -534,8 +534,8 @@ between territories.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/identify_markers.html">identify_markers</a></span><span class="op">(</span><span class="va">vesalius</span>, seed <span class="op">=</span> <span class="fl">1</span>, query <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## #--------------------------------------------------------------------------------# </span></span>
-<span><span class="co">## 2023-09-12 23:52:31.894336 ===&gt; Computing DEGs in spatial_omics &lt;===</span></span>
-<span><span class="co">## 2023-09-12 23:52:32.546038 ===&gt; 1 VS 2 &lt;=== </span></span>
+<span><span class="co">## 2023-09-18 21:12:51.570036 ===&gt; Computing DEGs in spatial_omics &lt;===</span></span>
+<span><span class="co">## 2023-09-18 21:12:52.382385 ===&gt; 1 VS 2 &lt;=== </span></span>
 <span><span class="co">## #--------------------------------------------------------------------------------#</span></span></code></pre>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">deg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_markers.html">get_markers</a></span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span></code></pre></div>

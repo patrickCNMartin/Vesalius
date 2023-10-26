@@ -81,7 +81,7 @@ Adding custom count matrix to a vesalius assay object.</p>
 <span>  <span class="va">vesalius_assay</span>,</span>
 <span>  <span class="va">counts</span>,</span>
 <span>  raw_counts <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  count_type <span class="op">=</span> <span class="st">"custom_counts"</span>,</span>
+<span>  add_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -101,11 +101,6 @@ Adding custom count matrix to a vesalius assay object.</p>
 <dd><p>matrix or sparse matrix containing raw counts</p></dd>
 
 
-<dt>count_type</dt>
-<dd><p>character string defining the name of the count matrix
-being added.</p></dd>
-
-
 <dt>force</dt>
 <dd><p>logical indicating if count matrix provided should also be used
 as raw count matrix.</p></dd>
@@ -113,6 +108,11 @@ as raw count matrix.</p></dd>
 
 <dt>verbose</dt>
 <dd><p>logical indicating if progress messages should be outputed.</p></dd>
+
+
+<dt>count_type</dt>
+<dd><p>character string defining the name of the count matrix
+being added.</p></dd>
 
 </dl></div>
     <div id="value">

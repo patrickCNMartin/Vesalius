@@ -175,6 +175,9 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/coordinates.html</loc>
   </url>
   <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/cost_to_prob.html</loc>
+  </url>
+  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/counts.html</loc>
   </url>
   <url>
@@ -283,6 +286,9 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_assay_names.html</loc>
   </url>
   <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_coordinayes.html</loc>
+  </url>
+  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_counts.html</loc>
   </url>
   <url>
@@ -353,9 +359,6 @@
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/match_index.html</loc>
-  </url>
-  <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/match_index_batch.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/message_switch.html</loc>
@@ -452,6 +455,9 @@
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/vesalius_deg_wilcox.html</loc>
+  </url>
+  <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/vesalius_package.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/view_gene_expression.html</loc>

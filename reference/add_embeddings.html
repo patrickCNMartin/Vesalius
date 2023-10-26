@@ -77,12 +77,7 @@ Add custom embeddings to vesalius objects</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_embeddings</span><span class="op">(</span></span>
-<span>  <span class="va">vesalius_assay</span>,</span>
-<span>  <span class="va">embeddings</span>,</span>
-<span>  embedding_type <span class="op">=</span> <span class="st">"custom_embedding"</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_embeddings</span><span class="op">(</span><span class="va">vesalius_assay</span>, <span class="va">embeddings</span>, add_name <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -95,7 +90,7 @@ Add custom embeddings to vesalius objects</p>
 <dd><p>a matrix containing embedding values (see details)</p></dd>
 
 
-<dt>embedding_type</dt>
+<dt>add_name</dt>
 <dd><p>character string to be used as embedding name.</p></dd>
 
 

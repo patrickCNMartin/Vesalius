@@ -38,7 +38,7 @@
       <a href="../articles/Vesalius_Analysis/Spatial_DNA_seq.html">Vesalius: Spatial Genomics</a>
     </li>
     <li>
-      <a href="../articles/Vesalius_Analysis/Spatial_Transcriptomics.html">Vesalius: Spatial Transcriptomics</a>
+      <a href="../articles/Vesalius_Analysis/Spatial_RNA_seq.html">Vesalius: Spatial Transcriptomics</a>
     </li>
     <li>
       <a href="../articles/Vesalius_Analysis/Vesalius_MSB_analysis.html">Vesalius: MSB Manuscript Analysis</a>
@@ -75,8 +75,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_embeddings</span><span class="op">(</span></span>
 <span>  <span class="va">vesalius_assay</span>,</span>
 <span>  dim_reduction <span class="op">=</span> <span class="st">"PCA"</span>,</span>
-<span>  normalisation <span class="op">=</span> <span class="st">"log_norm"</span>,</span>
-<span>  use_count <span class="op">=</span> <span class="st">"raw"</span>,</span>
+<span>  normalization <span class="op">=</span> <span class="st">"log_norm"</span>,</span>
+<span>  use_counts <span class="op">=</span> <span class="st">"raw"</span>,</span>
 <span>  dimensions <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>  tensor_resolution <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  filter_grid <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -99,16 +99,6 @@
 <dd><p>string describing which dimensionality
 reduction method should be used. One of the following:
 "PCA", "PCA_L", "UMAP", "LSI", "LSI_UMAP".</p></dd>
-
-
-<dt>normalisation</dt>
-<dd><p>string describing which normalisation 
-method to use. One of the following "log_norm", "SCT", "TFIDF", "raw".</p></dd>
-
-
-<dt>use_count</dt>
-<dd><p>string describing which counts should be used for the 
-generating emebddings. Default = "raw". See details.</p></dd>
 
 
 <dt>dimensions</dt>
@@ -154,6 +144,16 @@ as it usually captures sequencing depth (technical variation)</p></dd>
 
 <dt>verbose</dt>
 <dd><p>logical output progress message or not. Default = TRUE</p></dd>
+
+
+<dt>normalisation</dt>
+<dd><p>string describing which normalisation 
+method to use. One of the following "log_norm", "SCT", "TFIDF", "none".</p></dd>
+
+
+<dt>use_count</dt>
+<dd><p>string describing which counts should be used for the 
+generating emebddings. Default = "raw". See details.</p></dd>
 
 </dl></div>
     <div id="value">

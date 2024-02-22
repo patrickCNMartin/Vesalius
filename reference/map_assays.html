@@ -38,7 +38,7 @@
       <a href="../articles/Vesalius_Analysis/Spatial_DNA_seq.html">Vesalius: Spatial Genomics</a>
     </li>
     <li>
-      <a href="../articles/Vesalius_Analysis/Spatial_Transcriptomics.html">Vesalius: Spatial Transcriptomics</a>
+      <a href="../articles/Vesalius_Analysis/Spatial_RNA_seq.html">Vesalius: Spatial Transcriptomics</a>
     </li>
     <li>
       <a href="../articles/Vesalius_Analysis/Vesalius_MSB_analysis.html">Vesalius: MSB Manuscript Analysis</a>
@@ -75,17 +75,24 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">map_assays</span><span class="op">(</span></span>
 <span>  <span class="va">seed_assay</span>,</span>
 <span>  <span class="va">query_assay</span>,</span>
+<span>  signal <span class="op">=</span> <span class="st">"variable_features"</span>,</span>
+<span>  use_cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"feature"</span>, <span class="st">"niche"</span><span class="op">)</span>,</span>
 <span>  neighborhood <span class="op">=</span> <span class="st">"knn"</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  radius <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  depth <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  dimensions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span><span class="op">)</span>,</span>
-<span>  batch_size <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  signal <span class="op">=</span> <span class="st">"variable_features"</span>,</span>
+<span>  batch_size <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  epochs <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  allow_duplicates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  use_norm <span class="op">=</span> <span class="st">"raw"</span>,</span>
+<span>  scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>  use_cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"feature"</span>, <span class="st">"niche"</span><span class="op">)</span>,</span>
 <span>  custom_cost <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  return_cost <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  seed_cell_labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  query_cell_labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  merge <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -100,9 +107,21 @@
 <dd><p>vesalius_assay objecy - data to map</p></dd>
 
 
+<dt>signal</dt>
+<dd><p>character (variable_features, all_features, embeddings, custom)
+- What should  be used as cell signal to generate the cost matrix.
+Seed details</p></dd>
+
+
+<dt>use_cost</dt>
+<dd><p>character string defining how should total cost be computer
+Available: feature, niche, territory, composition (See details for combinations
+and custom matrices)</p></dd>
+
+
 <dt>neighborhood</dt>
 <dd><p>character - how should the neighborhood be selected?
-"knn", "radius", "depth"(See details)</p></dd>
+"knn", "radius", "graph"(See details)</p></dd>
 
 
 <dt>k</dt>
@@ -129,14 +148,17 @@ to consider for the neighborhood</p></dd>
 problem solving</p></dd>
 
 
-<dt>signal</dt>
-<dd><p>character (variable_features, all_features, embeddings, custom)
-- What should  be used as cell signal to generate the cost matrix.
-Seed details</p></dd>
-
-
 <dt>use_norm</dt>
 <dd><p>character - which count data to use</p></dd>
+
+
+<dt>scale</dt>
+<dd><p>logical - should signal be scaled</p></dd>
+
+
+<dt>threshold</dt>
+<dd><p>score threshold below which indicices should be removed.
+Scores will always be between 0 and 1</p></dd>
 
 
 <dt>custom_cost</dt>
@@ -158,7 +180,7 @@ containing custom cost matrix. Used instead of vesalius cost matrix</p></dd>
     <h2>Details</h2>
     <p>The goal is to assign the best matching point between a seed set and
 a query set.</p>
-<p>To do so, <code>integrate_horizontally</code> will first extract a
+<p>To do so, <code>map_assays</code> will first extract a
 biological signal. This can be latent space embeddings per cell, or by using
 gene counts (or any other modality).</p>
 <p>If using gene counts, there are a few more options available to
@@ -167,31 +189,50 @@ intersection between the variable features in your seed_assay and your
 query_assay. "all_features" will find the intersection of all genes across
 assays (even if they are not highly variable). Finally, you can also select
 a custom gene vector, containing only the gene set you are interested in.</p>
-<p>The second step is to create a cost matrix. The cost matrix computes the
-distance (using the signal) betwwen each point in the seed and query. It
-also includes the distance in signal between each points neighborhoods.
-The neighborhood singal is computed by averaging the signal across k
-nearest neighbors in space if using Knn. If using radius, the neighborhood
-will be computed using all cells within a definined radius. 
-If using depth, coordinates will be used to create a voronoi graph. 
-The neighborhood will be composed of all cells with "depth" steps i.e.
-how many nodes in the graph do you need to go through to get to taget cell?
-A depth of one will contain all cells in direct contact with center cell.</p>
-
+<p>The second step is to create a cost matrix. The creation of a cost matrix
+is achieved by pair-wise sum of various cost matrices. By default, 
+the map_assays function will use "feature" and "niche" cost matrices. 
+The feature matrix computes the pearson correlation between the seed and query
+using which ever signal was defined by the signal argument (variable_features)
+will compute the correlation between shared variable features in seed 
+and query).
+The niche matrix will be computed by using the pearson correlation between
+niche expression profiles (based on signal). Niche are defined using the
+neighborhood argument where knn represent the k nearest neighbors algorithm
+(with k defining the number of nearest neighbors), depth represents the 
+graph depth of a local neighborhood graph, and radius defining a spatial
+radius surrunding a center cell. The singal (expression or embedding) is
+average across all cells in the niche.
+The territory matrix will compare the average signal of vesalius 
+territories between seed and query. 
+The composition matrix will compute a frequency aware jaccard index
+between cell types present in a niche. Cell types must be assigned 
+to seed and query vesalius objects  (See add_cells function)
+Total cost matrix will be computed by computing the pairwise sum 
+of the complement (1 - p ) of each cost matrix.</p>
 <p>This cost matrix is then parsed to a
 Kuhn–Munkres algorithm that will generate point pairs that minimize
 the overall cost.</p>
 <p>Since the algorithm complexity is O(n3), it can be time consuming to
-to run on larger data sets. We recomned using "exact" mapping when
-there are less then 1500 points (a few minutes) and use "div" 
-with larger data sets. The "div" option will split the query data
-into random batches of pre-defined size (batch_size). The optimization
-will be run on each batch serately and the results will be concatenated
-together. Note this will not be an exact match but an approximation.</p>
+to run on larger data sets. As such, mapping will be approximated by
+dividing seed and query into batches defined by batch size. For an
+exact mapping ensure that batch_size is larger than the number of cells
+in both query and seed.</p>
 <p>Finaly once the matches are found, the coordinates are mapped to its
 corresponding point and a new object is returned.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vesalius</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Create Vesalius object for processing</span></span></span>
+<span class="r-in"><span><span class="va">vesalius</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_vesalius_assay.html">build_vesalius_assay</a></span><span class="op">(</span><span class="va">coordinates</span>, <span class="va">counts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">jitter_ves</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_vesalius_assay.html">build_vesalius_assay</a></span><span class="op">(</span><span class="va">jitter_coord</span>, <span class="va">jitter_counts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mapped</span> <span class="op">&lt;-</span> <span class="fu">map_assays</span><span class="op">(</span><span class="va">vesalius</span>, <span class="va">jitter_ves</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

@@ -39,7 +39,7 @@ coordinate pair."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
       <a href="../articles/Vesalius_Analysis/Spatial_DNA_seq.html">Vesalius: Spatial Genomics</a>
     </li>
     <li>
-      <a href="../articles/Vesalius_Analysis/Spatial_Transcriptomics.html">Vesalius: Spatial Transcriptomics</a>
+      <a href="../articles/Vesalius_Analysis/Spatial_RNA_seq.html">Vesalius: Spatial Transcriptomics</a>
     </li>
     <li>
       <a href="../articles/Vesalius_Analysis/Vesalius_MSB_analysis.html">Vesalius: MSB Manuscript Analysis</a>
@@ -81,7 +81,6 @@ coordinate pair.</p>
 <span>  assay <span class="op">=</span> <span class="st">"spatial_omics"</span>,</span>
 <span>  scale <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"um"</span>,</span>
-<span>  layer <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -106,6 +105,16 @@ Default is NULL. See details.</p></dd>
 <dt>assay</dt>
 <dd><p>character vector containing names of the assays
 (see details).</p></dd>
+
+
+<dt>scale</dt>
+<dd><p>character | numeric - if "auto", vesalius will compute
+99 percentile of inter barcodes distance else provide a numeric value
+describing distance between barcodes.</p></dd>
+
+
+<dt>unit</dt>
+<dd><p>character - units of scale</p></dd>
 
 
 <dt>verbose</dt>
@@ -149,9 +158,9 @@ Norm is not recommened at the moment</p>
 <span class="r-in"><span><span class="co"># Single assay object</span></span></span>
 <span class="r-in"><span><span class="va">ves</span> <span class="op">&lt;-</span> <span class="fu">build_vesalius_assay</span><span class="op">(</span><span class="va">coordinates</span>, <span class="va">counts</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> #--------------------------------------------------------------------------------# </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-12 18:31:26.462309  Checking Coordinates in spatial_omics </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-12 18:31:26.491416  Checking Counts in spatial_omics </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-12 18:31:26.506813  Calculating Assay scale from coordinates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-02-22 21:57:38.217739  Checking Coordinates in spatial_omics </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-02-22 21:57:38.249823  Checking Counts in spatial_omics </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-02-22 21:57:38.271927  Calculating Assay scale from coordinates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> #--------------------------------------------------------------------------------# </span>
 </code></pre></div>
     </div>

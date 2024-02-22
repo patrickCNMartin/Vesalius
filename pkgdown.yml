@@ -3,10 +3,10 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   Spatial_DNA_seq: Vesalius_Analysis/Spatial_DNA_seq.html
-  Spatial_Transcriptomics: Vesalius_Analysis/Spatial_Transcriptomics.html
+  Spatial_RNA_seq: Vesalius_Analysis/Spatial_RNA_seq.html
   Vesalius_MSB_analysis: Vesalius_Analysis/Vesalius_MSB_analysis.html
   vesalius: vesalius.html
-last_built: 2024-01-12T18:31Z
+last_built: 2024-02-22T21:57Z
 urls:
   reference: https://patrickcnmartin.github.io/Vesalius/reference
   article: https://patrickcnmartin.github.io/Vesalius/articles

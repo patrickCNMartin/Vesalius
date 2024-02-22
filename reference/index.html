@@ -38,7 +38,7 @@
       <a href="../articles/Vesalius_Analysis/Spatial_DNA_seq.html">Vesalius: Spatial Genomics</a>
     </li>
     <li>
-      <a href="../articles/Vesalius_Analysis/Spatial_Transcriptomics.html">Vesalius: Spatial Transcriptomics</a>
+      <a href="../articles/Vesalius_Analysis/Spatial_RNA_seq.html">Vesalius: Spatial Transcriptomics</a>
     </li>
     <li>
       <a href="../articles/Vesalius_Analysis/Vesalius_MSB_analysis.html">Vesalius: MSB Manuscript Analysis</a>
@@ -162,7 +162,7 @@ checking user provided embedding matrix</p></td>
         </td>
         <td><p>check if eq method are avilable</p></td>
       </tr><tr><td>
-          <p><code><a href="check_features.html">check_features()</a></code> </p>
+          <p><code><a href="check_features.html">check_features()</a></code> <code><a href="check_features.html">check_features()</a></code> </p>
         </td>
         <td><p>check features</p></td>
       </tr><tr><td>
@@ -244,9 +244,9 @@ check if input image is in correct format</p></td>
         </td>
         <td><p>compute and greate nearest neighbor graph</p></td>
       </tr><tr><td>
-          <p><code><a href="compute_territory_area.html">compute_territory_area()</a></code> </p>
+          <p><code><a href="concat_cost.html">concat_cost()</a></code> </p>
         </td>
-        <td><p>Calculate the total area of a territory</p></td>
+        <td><p>concat cost - pairwise sum of score complement</p></td>
       </tr><tr><td>
           <p><code><a href="concat_embed.html">concat_embed()</a></code> </p>
         </td>
@@ -310,10 +310,6 @@ group they belong to.</p></td>
         </td>
         <td><p>distance pooling beads of colour segment into seperate territories</p></td>
       </tr><tr><td>
-          <p><code><a href="divide_and_conquer.html">divide_and_conquer()</a></code> </p>
-        </td>
-        <td><p>splitting cost matrix into batches for batch processing</p></td>
-      </tr><tr><td>
           <p><code><a href="ecdf_eq.html">ecdf_eq()</a></code> </p>
         </td>
         <td><p>internal ecdf eq 
@@ -354,10 +350,6 @@ used for formatting</p></td>
           <p><code><a href="extend_boundary.html">extend_boundary()</a></code> </p>
         </td>
         <td><p>extend image boundary around territory</p></td>
-      </tr><tr><td>
-          <p><code><a href="feature_dist.html">feature_dist()</a></code> </p>
-        </td>
-        <td><p>compute the distance between seed and query signals</p></td>
       </tr><tr><td>
           <p><code><a href="filter_grid.html">filter_grid()</a></code> </p>
         </td>
@@ -431,10 +423,6 @@ used for formatting</p></td>
         </td>
         <td><p>get embeddings from vesalius_assay</p></td>
       </tr><tr><td>
-          <p><code><a href="get_features.html">get_features()</a></code> </p>
-        </td>
-        <td><p>get cell signal from vesalius assays</p></td>
-      </tr><tr><td>
           <p><code><a href="get_func_from_commit.html">get_func_from_commit()</a></code> </p>
         </td>
         <td><p>get function name from commit list</p></td>
@@ -442,6 +430,14 @@ used for formatting</p></td>
           <p><code><a href="get_markers.html">get_markers()</a></code> </p>
         </td>
         <td><p>get markers from vesalius_assay</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_neighborhood_signal.html">get_neighborhood_signal()</a></code> </p>
+        </td>
+        <td><p>Method dispatch function for neighborhood selection</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_signal.html">get_signal()</a></code> </p>
+        </td>
+        <td><p>get cell signal from vesalius assays</p></td>
       </tr><tr><td>
           <p><code><a href="get_territories.html">get_territories()</a></code> </p>
         </td>
@@ -456,6 +452,10 @@ used for formatting</p></td>
         <td><p>globalise territories
 converts territories number from territory values per segment
 to territory values overall the entire spatial omics assay.</p></td>
+      </tr><tr><td>
+          <p><code><a href="graph_neighborhood.html">graph_neighborhood()</a></code> </p>
+        </td>
+        <td><p>Graph depth method based method to select niche</p></td>
       </tr><tr><td>
           <p><code><a href="identify_markers.html">identify_markers()</a></code> </p>
         </td>
@@ -491,6 +491,10 @@ Function that does the smoothing on individual image array</p></td>
         </td>
         <td><p>kmeans segmentation function</p></td>
       </tr><tr><td>
+          <p><code><a href="knn_neighborhood.html">knn_neighborhood()</a></code> </p>
+        </td>
+        <td><p>k nearest neighbors - niche selection</p></td>
+      </tr><tr><td>
           <p><code><a href="layer_territory.html">layer_territory()</a></code> </p>
         </td>
         <td><p>layer_territory generates layer from the outside to the inside of 
@@ -512,11 +516,6 @@ a territory</p></td>
         </td>
         <td><p>Aling and integrate spatial assay from the same modality using super pixels</p></td>
       </tr><tr><td>
-          <p><code><a href="match_index.html">match_index()</a></code> </p>
-        </td>
-        <td><p>Finding optimal mapping between query and seed using a mini batch 
-approach</p></td>
-      </tr><tr><td>
           <p><code><a href="message_switch.html">message_switch()</a></code> </p>
         </td>
         <td><p>switch message output based in input</p></td>
@@ -529,9 +528,22 @@ approach</p></td>
         </td>
         <td><p>compute average expression of local neighborhood</p></td>
       </tr><tr><td>
+          <p><code><a href="niche_composition.html">niche_composition()</a></code> </p>
+        </td>
+        <td><p>Method dispatch function for neighborhood selection - added
+flavor specific to composition</p></td>
+      </tr><tr><td>
+          <p><code><a href="no_norm.html">no_norm()</a></code> </p>
+        </td>
+        <td><p>raw norm</p></td>
+      </tr><tr><td>
           <p><code><a href="norm_pixel.html">norm_pixel()</a></code> </p>
         </td>
         <td><p>pixel normalisation dispatch function</p></td>
+      </tr><tr><td>
+          <p><code><a href="optimize_matching.html">optimize_matching()</a></code> </p>
+        </td>
+        <td><p>Wrapper for fast niche composition</p></td>
       </tr><tr><td>
           <p><code><a href="point_mapping.html">point_mapping()</a></code> </p>
         </td>
@@ -545,13 +557,13 @@ approach</p></td>
         </td>
         <td><p>process counts</p></td>
       </tr><tr><td>
+          <p><code><a href="radius_neighborhood.html">radius_neighborhood()</a></code> </p>
+        </td>
+        <td><p>Radius based method to select niche</p></td>
+      </tr><tr><td>
           <p><code><a href="rasterise.html">rasterise()</a></code> </p>
         </td>
         <td><p>rasterise tiles</p></td>
-      </tr><tr><td>
-          <p><code><a href="raw_norm.html">raw_norm()</a></code> </p>
-        </td>
-        <td><p>raw norm</p></td>
       </tr><tr><td>
           <p><code><a href="rebalence_colors.html">rebalence_colors()</a></code> </p>
         </td>
@@ -570,6 +582,10 @@ performs total variance regularisation</p></td>
         </td>
         <td><p>regularise image</p></td>
       </tr><tr><td>
+          <p><code><a href="score_matches.html">score_matches()</a></code> </p>
+        </td>
+        <td><p>Extract score from best matches</p></td>
+      </tr><tr><td>
           <p><code><a href="search_log.html">search_log()</a></code> </p>
         </td>
         <td><p>search through log for parameter values or names</p></td>
@@ -582,6 +598,10 @@ performs total variance regularisation</p></td>
         </td>
         <td><p>select inital indices</p></td>
       </tr><tr><td>
+          <p><code><a href="signal_similarity.html">signal_similarity()</a></code> </p>
+        </td>
+        <td><p>compute the similarity between seed and query signals</p></td>
+      </tr><tr><td>
           <p><code><a href="smooth_image.html">smooth_image()</a></code> </p>
         </td>
         <td><p>Smooth Image</p></td>
@@ -593,6 +613,10 @@ performs total variance regularisation</p></td>
           <p><code><a href="territory_morphing.html">territory_morphing()</a></code> </p>
         </td>
         <td><p>territory_morphing applies morphological operators to a set of territoriees</p></td>
+      </tr><tr><td>
+          <p><code><a href="territory_neighborhood.html">territory_neighborhood()</a></code> </p>
+        </td>
+        <td><p>Territory selection for large scale niche</p></td>
       </tr><tr><td>
           <p><code><a href="territory_plot.html">territory_plot()</a></code> </p>
         </td>
@@ -646,7 +670,7 @@ performs total variance regularisation</p></td>
         </td>
         <td><p>wilcox rank sum test for DEG</p></td>
       </tr><tr><td>
-          <p><code><a href="vesalius_package.html">vesalius_package</a></code> <code><a href="vesalius_package.html">vesalius-package</a></code> </p>
+          <p><code><a href="vesalius_package.html">vesalius</a></code> <code><a href="vesalius_package.html">vesalius_package</a></code> <code><a href="vesalius_package.html">vesalius-package</a></code> </p>
         </td>
         <td><p>vesalius</p></td>
       </tr><tr><td>

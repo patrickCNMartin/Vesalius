@@ -13,7 +13,7 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/articles/Vesalius_Analysis/Spatial_DNA_seq.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/articles/Vesalius_Analysis/Spatial_Transcriptomics.html</loc>
+    <loc>https://patrickcnmartin.github.io/Vesalius/articles/Vesalius_Analysis/Spatial_RNA_seq.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/articles/Vesalius_Analysis/Vesalius_MSB_analysis.html</loc>
@@ -160,7 +160,7 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/compute_nearest_neighbor_graph.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/compute_territory_area.html</loc>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/concat_cost.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/concat_embed.html</loc>
@@ -208,9 +208,6 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/distance_pooling.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/divide_and_conquer.html</loc>
-  </url>
-  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/ecdf_eq.html</loc>
   </url>
   <url>
@@ -239,9 +236,6 @@
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/extend_boundary.html</loc>
-  </url>
-  <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/feature_dist.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/filter_grid.html</loc>
@@ -298,13 +292,16 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_embeddings.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_features.html</loc>
-  </url>
-  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_func_from_commit.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_markers.html</loc>
+  </url>
+  <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_neighborhood_signal.html</loc>
+  </url>
+  <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_signal.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/get_territories.html</loc>
@@ -314,6 +311,9 @@
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/globalise_territories.html</loc>
+  </url>
+  <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/graph_neighborhood.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/identify_markers.html</loc>
@@ -343,6 +343,9 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/kmeans_segmentation.html</loc>
   </url>
   <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/knn_neighborhood.html</loc>
+  </url>
+  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/layer_territory.html</loc>
   </url>
   <url>
@@ -358,9 +361,6 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/map_assays.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/match_index.html</loc>
-  </url>
-  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/message_switch.html</loc>
   </url>
   <url>
@@ -370,7 +370,16 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/neighborhood_signal.html</loc>
   </url>
   <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/niche_composition.html</loc>
+  </url>
+  <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/no_norm.html</loc>
+  </url>
+  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/norm_pixel.html</loc>
+  </url>
+  <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/optimize_matching.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/point_mapping.html</loc>
@@ -382,10 +391,10 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/process_counts.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/rasterise.html</loc>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/radius_neighborhood.html</loc>
   </url>
   <url>
-    <loc>https://patrickcnmartin.github.io/Vesalius/reference/raw_norm.html</loc>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/rasterise.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/rebalence_colors.html</loc>
@@ -400,6 +409,9 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/regularise_image.html</loc>
   </url>
   <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/score_matches.html</loc>
+  </url>
+  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/search_log.html</loc>
   </url>
   <url>
@@ -409,6 +421,9 @@
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/select_initial_indices.html</loc>
   </url>
   <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/signal_similarity.html</loc>
+  </url>
+  <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/smooth_image.html</loc>
   </url>
   <url>
@@ -416,6 +431,9 @@
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/territory_morphing.html</loc>
+  </url>
+  <url>
+    <loc>https://patrickcnmartin.github.io/Vesalius/reference/territory_neighborhood.html</loc>
   </url>
   <url>
     <loc>https://patrickcnmartin.github.io/Vesalius/reference/territory_plot.html</loc>

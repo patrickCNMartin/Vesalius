@@ -38,7 +38,7 @@
       <a href="../articles/Vesalius_Analysis/Spatial_DNA_seq.html">Vesalius: Spatial Genomics</a>
     </li>
     <li>
-      <a href="../articles/Vesalius_Analysis/Spatial_Transcriptomics.html">Vesalius: Spatial Transcriptomics</a>
+      <a href="../articles/Vesalius_Analysis/Spatial_RNA_seq.html">Vesalius: Spatial Transcriptomics</a>
     </li>
     <li>
       <a href="../articles/Vesalius_Analysis/Vesalius_MSB_analysis.html">Vesalius: MSB Manuscript Analysis</a>
@@ -82,10 +82,13 @@
 <span>  k <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  radius <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  depth <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  batch_size <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="st">"div"</span>,</span>
+<span>  batch_size <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  epochs <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  allow_duplicates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  use_cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"feature"</span>, <span class="st">"niche"</span><span class="op">)</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  seed_cell_labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  query_cell_labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -94,6 +97,11 @@
     <h2>Arguments</h2>
     <dl><dt>query_signal</dt>
 <dd><p>processed query signal from query assay</p></dd>
+
+
+<dt>cost</dt>
+<dd><p>matrix - matrix of size n (query cells) by p (seed cells)
+containing custom cost matrix.</p></dd>
 
 
 <dt>seed_signal</dt>
@@ -117,8 +125,14 @@ neighborhood</p></dd>
 <dd><p>int number of points in each query batch</p></dd>
 
 
-<dt>mapping</dt>
-<dd><p>exact mapping or div (divide and conquer)</p></dd>
+<dt>use_cost</dt>
+<dd><p>character string defining how should total cost be computer
+Available: feature, niche, territory, composition (See details for combinations</p></dd>
+
+
+<dt>threshold</dt>
+<dd><p>score threshold below which indicices should be removed.
+Scores will always be between 0 and 1</p></dd>
 
 
 <dt>verbose</dt>
@@ -129,18 +143,8 @@ neighborhood</p></dd>
 <dd><p>vesalius_assay object</p></dd>
 
 
-<dt>custom_cost</dt>
-<dd><p>matrix - matrix of size n (query cells) by p (seed cells)
-containing custom cost matrix. Used instead of vesalius cost matrix</p></dd>
-
-
 <dt>seed</dt>
 <dd><p>vesalius_assay object</p></dd>
-
-
-<dt>overwrite</dt>
-<dd><p>logical - if custom_cost is not NULL, should this matrix
-be added to the vesalius matrix or should it overwrite it completely.</p></dd>
 
 </dl></div>
     <div id="value">
